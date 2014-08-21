@@ -1,0 +1,1 @@
+<h1>{{ trans('app.brand') }}</h1>
