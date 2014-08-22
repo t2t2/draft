@@ -1,6 +1,7 @@
 <?php
 $navbar = [
 	['text' => trans('navigation.home'), 'url' => route('home'), 'active' => 'home'],
+	['text' => trans('navigation.league'), 'url' => route('league.index'), 'active' => 'league.*'],
 ];
 ?>
 

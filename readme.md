@@ -7,3 +7,10 @@ Based on the Summer / Winter Movie Draft of NSFWshow, Draftr is site for creatin
 Note: Draftr is codename for the codebase, while the product is called Box Office Draft. Draftr also used to be the name of the site until August 2013.
 
 Framework: Laravel 4
+
+# Installation
+
+0. Follow basic steps for installing a laravel project (most likely `git clone` + `composer install`)
+1. Create a file `.env` in root folder and have it's contents be only the environment you wish to run it in (probably `local`)
+2. Duplicate everything from `app/config/local.dist` into `app/config/local` and replace values according to your preferences
+3. Migrate the database & optionally run the database seeder.

@@ -34,7 +34,11 @@ Route::group(['prefix' => 'auth'], function() {
 // User profile
 Route::get('user/{username}', ['uses' => 'UserController@show', 'as' => 'user.show']);
 
+// Leagues page
+Route::get('leagues', ['uses' => 'LeagueController@index', 'as' => 'league.index']);
 
+
+Route::get('league/{league_slug}', ['uses' => 'LeagueController@show', 'as' => 'league.show']);
 
 
 /**

@@ -124,6 +124,8 @@ return array(
 
 		'Former\FormerServiceProvider',
 		'Krucas\Notification\NotificationServiceProvider',
+		'Cviebrock\EloquentSluggable\SluggableServiceProvider',
+
 	),
 
 	/*

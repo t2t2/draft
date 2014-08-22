@@ -146,6 +146,9 @@ Route::bind('username', function($value) {
 	return User::where('username', $value)->firstOrFail();
 });
 
+Route::bind('league-slug', function($value) {
+	return League::where('slug', $value)->firstOrFail();
+});
 
 
 

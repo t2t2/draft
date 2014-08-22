@@ -11,15 +11,13 @@ class UserTableSeeder extends Seeder {
 	public function run() {
 		DB::table('users')->truncate();
 
-		for ($i=0; $i < 200; $i++) {
+		for ($i = 0; $i < 99; $i++) {
 
 			$user = [
-				'username' => $this->faker->userName,
-				'email' => $this->faker->safeEmail,
+				'username'    => $this->faker->userName,
+				'displayname' => $this->faker->boolean(80) ? $this->faker->name : null,
+				'email'       => $this->faker->safeEmail,
 			];
-			if($i % 6 == 5) {
-				$user['displayname'] = $this->faker->name;
-			}
 
 			User::create($user);
 

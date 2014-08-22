@@ -4,11 +4,14 @@
 		"anahkiasen/former": "3.*",
 		"laravel/framework": "4.2.*",
 		"edvinaskrucas/notification": "3.*",
-		"guzzlehttp/guzzle": "4.2.*"
+		"guzzlehttp/guzzle": "4.2.*",
+		"cviebrock/eloquent-sluggable": "2.*"
 	},
 	"require-dev": {
 		"fzaninotto/faker": "1.*",
-		"barryvdh/laravel-ide-helper": "1.*"
+		"barryvdh/laravel-ide-helper": "1.*",
+		"doctrine/dbal": "~2.3",
+		"barryvdh/laravel-debugbar": "1.*"
 	},
 	"autoload": {
 		"classmap": [
@@ -28,6 +31,7 @@
 		"post-update-cmd": [
 			"php artisan clear-compiled",
 			"php artisan ide-helper:generate",
+			"php artisan debugbar:publish",
 			"php artisan optimize"
 		],
 		"post-create-project-cmd": [
