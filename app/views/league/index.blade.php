@@ -1,5 +1,8 @@
 <h1>Leagues</h1>
 
+@if(Auth::check())
+	<a href="{{ route('league.create') }}" class="pull-right">Create a new League</a>
+@endif
 <h2>Search</h2>
 <?php Former::populate($search); ?>
 {{ Former::vertical_open()->route('league.index')->method('GET')->addClass('clearfix') }}

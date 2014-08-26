@@ -39,19 +39,14 @@ class LeagueController extends PageController {
 		$leagues_query = League::query();
 
 		// Season
-		if($search['season'] != 0) {
-			$search_start = $seasons[$search['season']]['start'];
-			$search_end = $seasons[$search['season']]['end'];
-			$search_start[0] = $search_end[0] = $search['year'];
-			$search_start = call_user_func_array(['Carbon', 'create'], $search_start);
-			$search_end = call_user_func_array(['Carbon', 'create'], $search_end);
-
-			$leagues_query->whereBetween('start_date', [$search_start, $search_end]);
+		if ($search['season'] != 0) {
+			$leagues_query->season($search['year'], $search['season']);
 		}
 
 		$leagues = $leagues_query->paginate(10);
 
 		// Output
+		$this->layout->title = "Leagues";
 		$this->layout->content = View::make('league.index', [
 			'leagues' => $leagues,
 			'seasons' => $seasons_list,
@@ -60,6 +55,59 @@ class LeagueController extends PageController {
 		]);
 	}
 
+	/**
+	 * New league validation rules
+	 * @var array
+	 */
+	public $league_valid_rules = [
+		'name'        => ['required', 'max:255'],
+		'description' => ['required'],
+		'url'         => ['url'],
+		'private'     => ['boolean'],
+
+		'money'       => ['required', 'integer'],
+		'units'       => ['required', 'max:16'],
+		'extra_weeks' => ['required', 'integer', 'between:1,12'],
+	];
+
+	/**
+	 * League creation form
+	 */
+	public function create() {
+
+		$this->layout->title = 'Create league';
+		$this->layout->content = View::make('league.create', [
+			'validation_rules' => $this->league_valid_rules,
+		]);
+	}
+
+	/**
+	 * League creation
+	 */
+	public function store() {
+		$validator = Validator::make(Input::all(), $this->league_valid_rules);
+		if ($validator->fails()) {
+			Notification::error('Whoops, something is wrong with your input. Check your errors and try again.');
+
+			return Redirect::route('league.create')->withInput()->withErrors($validator);
+		}
+
+		// Create the league
+		$league = new League(Input::only([
+			'name', 'description', 'url', 'private', 'mode', 'money', 'units'
+		]));
+		$league->extra_weeks = Input::get('extra_weeks');
+
+		if($league->save()) {
+			// Attach current user as league admin
+
+			//TODO
+
+		} else {
+
+
+		}
+	}
 
 	/**
 	 * League page

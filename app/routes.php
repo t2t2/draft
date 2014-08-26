@@ -35,7 +35,12 @@ Route::group(['prefix' => 'auth'], function() {
 Route::get('user/{username}', ['uses' => 'UserController@show', 'as' => 'user.show']);
 
 // Leagues page
-Route::get('leagues', ['uses' => 'LeagueController@index', 'as' => 'league.index']);
+Route::group(['prefix' => 'leagues'], function() {
+	Route::get('/', ['uses' => 'LeagueController@index', 'as' => 'league.index']);
+	Route::get('/create', ['uses' => 'LeagueController@create', 'as' => 'league.create', 'before' => 'auth']);
+	Route::post('/', ['uses' => 'LeagueController@store', 'as' => 'league.store', 'before' => 'auth']);
+
+});
 
 
 Route::get('league/{league_slug}', ['uses' => 'LeagueController@show', 'as' => 'league.show']);

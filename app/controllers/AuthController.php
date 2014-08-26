@@ -79,6 +79,10 @@ class AuthController extends PageController {
 		}
 	}
 
+	/**
+	 * Registration validation rules
+	 * @var array
+	 */
 	public $register_valid_rules = [
 		'username'    => ['required', 'unique:users', 'min:2', 'max:16'],
 		'displayname' => ['max:64'],
