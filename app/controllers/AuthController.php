@@ -52,9 +52,13 @@ class AuthController extends PageController {
 		// Log in to laravel
 		if (Auth::attempt(['email' => $email, 'password' => 'moz:persona'], true)) {
 			if (Request::ajax()) {
-				return Response::json(['refresh' => true]);
+				if(Session::has('url.intended')) {
+					return Response::json(['redirect' => Session::get('url.intended')]);
+				} else {
+					return Response::json(['refresh' => true]);
+				}
 			} else {
-				return Redirect::back();
+				return Redirect::intended();
 			}
 		} else {
 			// Not an user
@@ -134,22 +138,22 @@ class AuthController extends PageController {
 
 		// Create user
 		$user = new User();
-		$user->username = Input::get("username");
-		$user->displayname = Input::get("displayname");
-		$user->email = Session::get("register_email");
+		$user->username = Input::get('username');
+		$user->displayname = Input::get('displayname');
+		$user->email = Session::get('register_email');
 
 		// Save & Login
 		if ($user->save()) {
 			Auth::login($user, true);
-			Session::forget("register_email");
+			Session::forget('register_email');
 
 			Notification::success("Welcome {$user->name}!");
 
-			return Redirect::to("/");
+			return Redirect::intended('/');
 		} else {
 			Notification::error("Save errors :'(");
 
-			return Redirect::to("register")->withInput();
+			return Redirect::to('register')->withInput();
 		}
 	}
 }
