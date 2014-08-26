@@ -3,6 +3,14 @@
 class AuthController extends PageController {
 
 	/**
+	 * Page to show if user hasn't logged it but hit by auth filter
+	 */
+	public function loginPage() {
+		$this->layout->title = 'Login';
+		$this->layout->content = View::make('login');
+	}
+
+	/**
 	 * Login with persona
 	 *
 	 * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
