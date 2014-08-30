@@ -27,10 +27,10 @@ class CreateLeaguesTable extends Migration {
 
 			$table->date('start_date');
 			$table->date('end_date');
-			$table->boolean('active');
+			$table->boolean('active')->default(false)->nullable();
 
-			$table->boolean('private')->default(false);
-			$table->boolean('featured')->default(false);
+			$table->boolean('private')->default(false)->nullable();
+			$table->boolean('featured')->default(false)->nullable();
 
 			$table->timestamps();
 

@@ -12,9 +12,15 @@ class CreateLeagueAdminsTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::table('league_admins', function(Blueprint $table)
+		Schema::create('league_admins', function(Blueprint $table)
 		{
-			//
+			$table->increments('id');
+			$table->integer('league_id')->unsigned();
+			$table->integer('user_id')->unsigned();
+			$table->timestamps();
+
+			$table->foreign('league_id')->references('id')->on('leagues')->onUpdate('cascade')->onDelete('cascade');
+			$table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
 		});
 	}
 
@@ -25,10 +31,7 @@ class CreateLeagueAdminsTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::table('league_admins', function(Blueprint $table)
-		{
-			//
-		});
+		Schema::drop('league_admins');
 	}
 
 }

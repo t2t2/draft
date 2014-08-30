@@ -35,9 +35,10 @@ use Cviebrock\EloquentSluggable\SluggableTrait;
  * @method static \Illuminate\Database\Query\Builder|\League whereFeatured($value)
  * @method static \Illuminate\Database\Query\Builder|\League whereCreatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\League whereUpdatedAt($value)
- * @property boolean $active
+ * @property boolean        $active
  * @method static \Illuminate\Database\Query\Builder|\League whereActive($value)
- * @method static \League season($year, $season) 
+ * @method static \League season($year, $season)
+ * @property-read \Illuminate\Database\Eloquent\Collection|\User[] $admins
  */
 class League extends Eloquent implements SluggableInterface {
 
@@ -79,4 +80,16 @@ class League extends Eloquent implements SluggableInterface {
 
 		return $query->whereBetween('start_date', [$search_start, $search_end]);
 	}
+
+
+	/**
+	 * League's admins relationship (n:m)
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+	 */
+	public function admins() {
+		return $this->belongsToMany('User', 'league_admins');
+	}
+
+
 }

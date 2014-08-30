@@ -96,16 +96,21 @@ class LeagueController extends PageController {
 		$league = new League(Input::only([
 			'name', 'description', 'url', 'private', 'mode', 'money', 'units'
 		]));
+		$league->mode = 'bid';
 		$league->extra_weeks = Input::get('extra_weeks');
+		$league->start_date = $league->end_date = Carbon::now()->addWeeks(Config::get('draft.maximum_weeks'));
 
-		if($league->save()) {
+		if ($league->save()) {
 			// Attach current user as league admin
+			$league->admins()->attach(Auth::user());
 
-			//TODO
+			Notification::success('Your league has been created.');
 
+			return Redirect::route('league.show', ['league_slug' => $league->slug]);
 		} else {
+			Notification::error('Database error, please try again later.');
 
-
+			return Redirect::back()->withInput();
 		}
 	}
 

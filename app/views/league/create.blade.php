@@ -1,10 +1,10 @@
 <h1>Create a league</h1>
 
-{{ Former::open() }}
+{{ Former::open()->route('league.store')->rules($validation_rules) }}
 	{{ Former::text('name') }}
 	{{ Former::textarea('description') }}
 	{{ Former::text('url') }}
-	{{ Former::checkbox('private') }}
+	{{ Former::checkbox('private')->unchecked_value(0) }}
 
 	{{ Former::legend('League Settings') }}
 	{{ Former::text('money')->value(Config::get('draft.league_defaults.money')) }}

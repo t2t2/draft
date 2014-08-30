@@ -1,1 +1,5 @@
-<h1>{{ $league->name }}</h1>
+@extends('layout.league')
+
+@section('league.content')
+	<p>League page</p>
+@endsection
