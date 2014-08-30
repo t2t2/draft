@@ -3,7 +3,7 @@
 @unless($league->active)
 	<div class="alert alert-warning" role="alert">
 		<strong>Your league isn't active yet</strong> <small>But it's ok</small>
-		<p>In order to consider a league to be active you must do the following:</p>
+		<p>In order for a league to be considered to be active you must do the following:</p>
 
 		<ul>
 			<li>Add movies to your league</li>
