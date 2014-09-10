@@ -21,7 +21,7 @@
 Route::get('/', ['uses' => 'HomeController@home', 'as' => 'home']);
 
 // Authentication
-Route::group(['prefix' => 'auth'], function() {
+Route::group(['prefix' => 'auth'], function () {
 	// Login, logout
 	Route::get('login', ['uses' => 'AuthController@loginPage', 'as' => 'auth.login.page']);
 	Route::post('login', ['uses' => 'AuthController@login', 'as' => 'auth.login']);
@@ -36,16 +36,23 @@ Route::group(['prefix' => 'auth'], function() {
 Route::get('user/{username}', ['uses' => 'UserController@show', 'as' => 'user.show']);
 
 // Leagues page
-Route::group(['prefix' => 'leagues'], function() {
+Route::group(['prefix' => 'leagues'], function () {
 	Route::get('/', ['uses' => 'LeagueController@index', 'as' => 'league.index']);
 	Route::get('/create', ['uses' => 'LeagueController@create', 'as' => 'league.create', 'before' => 'auth']);
 	Route::post('/', ['uses' => 'LeagueController@store', 'as' => 'league.store', 'before' => 'auth']);
+
+	Route::get('/mine', ['uses' => 'LeagueController@mine', 'as' => 'league.mine', 'before' => 'auth']);
 
 });
 
 
 Route::get('league/{league_slug}', ['uses' => 'LeagueController@show', 'as' => 'league.show']);
 
+
+// Admin
+Route::group(['prefix' => 'admin', 'before' => ['auth', 'admin']], function () {
+	Route::get('/', ['uses' => 'AdminController@index', 'as' => 'admin.index']);
+});
 
 /**
  * Global route filters

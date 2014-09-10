@@ -31,7 +31,7 @@ class LeagueController extends PageController {
 		// Generate years array, also default year
 		$years_list = range($now->year + 1, Config::get('draft.earliest_year'), -1);
 		$years_list = array_combine($years_list, $years_list);
-		if (! isset($search['year']) || isset($years_list[$search['year']])) {
+		if (! isset($search['year']) || ! isset($years_list[$search['year']])) {
 			$search['year'] = $now->year;
 		}
 
@@ -46,13 +46,36 @@ class LeagueController extends PageController {
 		$leagues = $leagues_query->paginate(10);
 
 		// Output
-		$this->layout->title = "Leagues";
+		$this->layout->title = 'Leagues';
 		$this->layout->content = View::make('league.index', [
 			'leagues' => $leagues,
 			'seasons' => $seasons_list,
 			'years'   => $years_list,
 			'search'  => $search,
 		]);
+	}
+
+	/**
+	 * Show leagues related to the current user
+	 */
+	public function mine() {
+		$leagues_query = League::query();
+
+		// Where the user is a player
+		// TODO
+
+		// Where the user is an admin
+		$leagues_query->join('league_admins', function ($join) {
+			$join->on('leagues.id', '=', 'league_admins.league_id')
+			     ->where('league_admins.user_id', '=', Auth::user()->id);
+		});
+
+		$leagues_query->orderBy('start_date', 'desc');
+		$leagues = $leagues_query->paginate(10);
+
+		// Output
+		$this->layout->title = 'My Leagues';
+		$this->layout->content = View::make('league.mine', compact('leagues'));
 	}
 
 	/**

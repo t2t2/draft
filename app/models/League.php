@@ -69,13 +69,13 @@ class League extends Eloquent implements SluggableInterface {
 	/**
 	 * Search by season scope
 	 *
-	 * @param \Illuminate\Database\Query\Builder $query
-	 * @param int                                $year   Season year
-	 * @param int                                $season Season id as defined by configuration
+	 * @param \Illuminate\Database\Eloquent\Builder $query
+	 * @param int                                   $year   Season year
+	 * @param int                                   $season Season id as defined by configuration
 	 *
 	 * @return $this
 	 */
-	public function scopeSeason(Illuminate\Database\Query\Builder $query, $year, $season) {
+	public function scopeSeason(Illuminate\Database\Eloquent\Builder $query, $year, $season) {
 		$seasons = Config::get('draft.seasons');
 		$search_start = $seasons[$season]['start'];
 		$search_end = $seasons[$season]['end'];
@@ -95,7 +95,7 @@ class League extends Eloquent implements SluggableInterface {
 	 */
 	public function admins() {
 		return $this->belongsToMany('User', 'league_admins')
-			->withTimestamps();
+		            ->withTimestamps();
 	}
 
 

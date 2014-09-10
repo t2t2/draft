@@ -22,8 +22,14 @@ $navbar = [
 			<ul class="nav navbar-nav">
 				@include('partials.nav', ['items' => $navbar])
 			</ul>
+
 			@if(Auth::check())
 				<ul class="nav navbar-nav navbar-right">
+					@if(Auth::user()->admin)
+						<li{{ str_is('admin.*', Route::currentRouteName()) ? ' class="active"' : '' }}>
+							<a href="{{ route('admin.index') }}">Admin</a>
+						</li>
+					@endif
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Hi {{ Auth::user()->name }} <span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
@@ -34,7 +40,7 @@ $navbar = [
 				</ul>
 			@elseif(Session::has('register_email'))
 				<ul class="nav navbar-nav navbar-right">
-					<li {{ Route::currentRouteName() == 'auth.register.form' ? 'class="active"' : '' }}>
+					<li{{ Route::currentRouteName() == 'auth.register.form' ? ' class="active"' : '' }}>
 						<a href="{{ route('auth.register.form') }}"><span>Finish Sign Up</span></a>
 					</li>
 					<li>

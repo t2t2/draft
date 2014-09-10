@@ -1,0 +1,1 @@
+<h3><a href="{{ route('league.show', ['league_slug' => $league->slug]) }}">{{ $league->name }}</a></h3>
