@@ -9,7 +9,7 @@
          processIsolation="false"
          stopOnFailure="false"
          syntaxCheck="false"
->
+        >
     <testsuites>
         <testsuite name="Application Test Suite">
             <directory>./app/tests/</directory>
@@ -18,7 +18,7 @@
 
     <filter>
         <whitelist>
-            <directory suffix=".php">./app</directory>s
+            <directory suffix=".php">./app</directory>
             <directory suffix=".php">./bootstrap</directory>
             <exclude>
                 <!-- Autoloaded by phpunit -->
@@ -32,4 +32,8 @@
             <file>./bootstrap/compiled.php</file>
         </blacklist>
     </filter>
+
+    <logging>
+        <log type="coverage-html" target="./coverage" charset="UTF-8" highlight="true"/>
+    </logging>
 </phpunit>
