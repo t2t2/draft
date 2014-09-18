@@ -11,25 +11,38 @@ class DatabaseSeeder extends Seeder {
 	{
 		// But seriously no
 		if(App::environment() == 'production') {
-			exit('No, seriously');
-		}
+			echo 'No, seriously';
 
+			return;
+		}
+		$disableForeignKeyChecks = in_array(DB::connection()->getDriverName(), ['mysql']);
 
 		Eloquent::unguard();
+		if ($disableForeignKeyChecks) {
+			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+		}
 
 		// Cleanup
 		$tables = [
+			'league_admins',
 			'leagues',
+			'movie_earnings',
+			'movies',
 			'users'
 		];
-
 		foreach($tables as $table) {
 			DB::table($table)->truncate();
+		}
+
+		if ($disableForeignKeyChecks) {
+			DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 		}
 
 		// Seeding
 		$this->call('UserTableSeeder');
 		$this->call('LeagueTableSeeder');
+		$this->call('MovieTableSeeder');
+		$this->call('MovieEarningsTableSeeder');
 	}
 
 }

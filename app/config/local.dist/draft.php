@@ -1,5 +1,6 @@
 <?php
 
 return [
-	'earliest_year' => 1990,
+	'admin_email'   => null,
+	'earliest_year' => 2013,
 ];

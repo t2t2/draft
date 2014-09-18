@@ -26,6 +26,12 @@ $navs = [
 					<p>Leagues</p>
 				</div>
 			</div>
+			<div class="col-md-3">
+				<div class="well text-center">
+					<div class="h1">{{ $stats['movies'] }}</div>
+					<p>Movies</p>
+				</div>
+			</div>
 		</div>
 
 	</div>

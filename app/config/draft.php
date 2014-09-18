@@ -1,6 +1,12 @@
 <?php
 
 return [
+
+	/**
+	 * Admin's email
+	 */
+	'admin_email' => null,
+
 	/**
 	 * League defaults
 	 *

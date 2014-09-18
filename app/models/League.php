@@ -51,7 +51,7 @@ class League extends Eloquent implements SluggableInterface {
 	protected $dates = ['start_date', 'end_date'];
 
 	/**
-	 * Allow filling these fields
+	 * Allow filling of these fields
 	 * @var array
 	 */
 	protected $fillable = ['name', 'description', 'url', 'private', 'mode', 'money', 'units'];

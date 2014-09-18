@@ -8,10 +8,10 @@
 		"cviebrock/eloquent-sluggable": "2.*"
 	},
 	"require-dev": {
-		"fzaninotto/faker": "1.*",
 		"barryvdh/laravel-ide-helper": "1.*",
 		"doctrine/dbal": "~2.3",
-		"barryvdh/laravel-debugbar": "1.*"
+		"barryvdh/laravel-debugbar": "1.*",
+		"phpunit/phpunit": "4.2.*"
 	},
 	"autoload": {
 		"classmap": [
@@ -34,7 +34,6 @@
 		"post-update-cmd": [
 			"php artisan clear-compiled",
 			"php artisan ide-helper:generate",
-			"php artisan debugbar:publish",
 			"php artisan optimize"
 		],
 		"post-create-project-cmd": [

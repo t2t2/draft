@@ -9,6 +9,7 @@ class AdminController extends PageController {
 		$stats = [
 			'users' => User::count(),
 			'leagues' => League::count(),
+			'movies' => Movie::count(),
 		];
 
 
