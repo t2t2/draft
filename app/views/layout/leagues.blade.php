@@ -1,7 +1,11 @@
-<h1>Leagues</h1>
+<div class="row">
+	<div class="small-12 column">
+		<h1>Leagues</h1>
+	</div>
+</div>
 
 <div class="row">
-	<div class="col-md-3">
+	<div class="medium-3 column">
 		<!-- Navigation -->
 <?php
 $items = [
@@ -13,12 +17,16 @@ if(Auth::check()) {
 	$items[] = 'divider';
 }
 ?>
-		<ul class="nav">
-			@include('partials.nav', ['items' => $items])
-		</ul>
+		<nav>
+			<ul class="side-nav">
+				@include('partials.nav', ['items' => $items])
+			</ul>
+		</nav>
 
 	</div>
-	<div class="col-md-9">
-		@yield('leagues.content')
+	<div class="medium-9 column">
+
+		@yield('layout.content')
+
 	</div>
 </div>

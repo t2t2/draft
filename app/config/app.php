@@ -123,6 +123,7 @@ return array(
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 
 		'Former\FormerServiceProvider',
+		'Binarix\FoundationPagination\FoundationPaginationServiceProvider',
 		'Krucas\Notification\NotificationServiceProvider',
 		'Cviebrock\EloquentSluggable\SluggableServiceProvider',
 

@@ -1,6 +1,6 @@
 @extends('layout.leagues')
 
-@section('leagues.content')
+@section('layout.content')
 	<h2>My Leagues</h2>
 
 	@if($leagues->count())

@@ -100,6 +100,15 @@ App::error(function (ModelNotFoundException $e) {
 	return Response::make($layout, 404);
 });
 
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+
+App::error(function (MethodNotAllowedHttpException $e) {
+	$layout = View::make("layout.main");
+	$layout->content = View::make("errors.shenanigans");
+
+	return Response::make($layout, 404);
+});
+
 
 /*
  * Layout Defaults
@@ -122,7 +131,7 @@ View::composer('layout.main', function ($view) {
 	}
 	if (Auth::check()) {
 		$jsdata['user'] = Auth::user()->email;
-	} elseif(Session::has('register_email')) {
+	} elseif (Session::has('register_email')) {
 		$jsdata['user'] = Session::get('register_email');
 	}
 	$view->jsdata = "";

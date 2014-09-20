@@ -1,6 +1,9 @@
-.navbar-persona {
-	margin-top: 12px;
-	margin-bottom: 12px;
+.top-bar-section ul li > button.persona-button {
+	padding: 0;
+}
+.top-bar-section ul li > button.persona-button:active,
+.top-bar-section ul li > button.persona-button:focus {
+	top: 8px;
 }
 
 /* Mozilla Persona */
@@ -14,6 +17,7 @@
 	font-weight: bold;
 	line-height: 1.1;
 	overflow: hidden;
+	padding: 0;
 	position: relative;
 	text-decoration: none;
 	text-shadow: 0 1px rgba(0, 0, 0, 0.5), 0 0 2px rgba(0, 0, 0, 0.2);

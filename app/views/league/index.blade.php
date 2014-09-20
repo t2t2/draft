@@ -1,12 +1,14 @@
 @extends('layout.leagues')
 
-@section('leagues.content')
+@section('layout.content')
+
 	<h2>Search</h2>
 	<?php Former::populate($search); ?>
 	{{ Former::vertical_open()->route('league.index')->method('GET')->addClass('clearfix') }}
 		<div class="row">
-			{{ Former::select('year')->options($years)->addGroupClass('col-sm-2') }}
-			{{ Former::select('season')->options($seasons)->addGroupClass('col-sm-3') }}
+			{{ Former::select('year')->options($years)->addGroupClass('medium-2 column') }}
+			{{ Former::select('season')->options($seasons)->addGroupClass('medium-3 column') }}
+			<div class="medium-7 column"><!-- placeholder --></div>
 		</div>
 		{{ Former::actions()->primary_submit('Search')->class('pull-right') }}
 	{{ Former::close() }}

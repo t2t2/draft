@@ -10,7 +10,7 @@
   'default_form_type' => 'horizontal',
 
   // The framework to be used by Former
-  'framework'         => 'TwitterBootstrap3',
+  'framework'         => 'ZurbFoundation4',
 
   // Validation
   ////////////////////////////////////////////////////////////////////

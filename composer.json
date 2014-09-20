@@ -5,7 +5,8 @@
 		"laravel/framework": "4.2.*",
 		"edvinaskrucas/notification": "3.*",
 		"guzzlehttp/guzzle": "4.2.*",
-		"cviebrock/eloquent-sluggable": "2.*"
+		"cviebrock/eloquent-sluggable": "2.*",
+		"binarix/foundation-pagination": "1.0.0"
 	},
 	"require-dev": {
 		"barryvdh/laravel-ide-helper": "1.*",

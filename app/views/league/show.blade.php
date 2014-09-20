@@ -1,5 +1,5 @@
 @extends('layout.league')
 
-@section('league.content')
+@section('layout.content')
 	<p>League page</p>
 @endsection

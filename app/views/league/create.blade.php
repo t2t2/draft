@@ -1,6 +1,6 @@
 @extends('layout.leagues')
 
-@section('leagues.content')
+@section('layout.content')
 	<h1>Create a league</h1>
 
 	{{ Former::open()->route('league.store')->rules($validation_rules) }}

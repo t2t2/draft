@@ -1,10 +1,10 @@
 <?php
 
 return [
-	'toggle_nav' => 'Toggle navigation',
+	'menu'   => 'Menu',
 
-	'home'       => 'Home',
-	'league'     => 'Leagues',
+	'home'   => 'Home',
+	'league' => 'Leagues',
 
-	'login'      => 'Sign in / Sign up',
+	'login'  => 'Sign in / Sign up',
 ];

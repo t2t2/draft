@@ -23,7 +23,7 @@ Route::get('/', ['uses' => 'HomeController@home', 'as' => 'home']);
 // Authentication
 Route::group(['prefix' => 'auth'], function () {
 	// Login, logout
-	Route::get('login', ['uses' => 'AuthController@loginPage', 'as' => 'auth.login.page']);
+	Route::get('login', ['uses' => 'AuthController@loginPage', 'as' => 'auth.login.page', 'before' => 'guest']);
 	Route::post('login', ['uses' => 'AuthController@login', 'as' => 'auth.login']);
 	Route::post('logout', ['uses' => 'AuthController@logout', 'as' => 'auth.logout']);
 

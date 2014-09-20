@@ -1,38 +1,16 @@
-<?php
-$navs = [
-	['text' => 'Home', 'url' => route('admin.index'), 'active' => 'admin.index'],
-];
-?>
+@extends('layout.admin')
 
-<h1>Admin</h1>
-<div class="row">
-	<div class="col-md-3">
-		<ul class="nav">
-			@include('partials.nav', ['items' => $navs])
-		</ul>
-	</div>
-	<div class="col-md-9">
+@section('layout.content')
 
-		<div class="row">
-			<div class="col-md-3">
-				<div class="well text-center">
-					<div class="h1">{{ $stats['users'] }}</div>
-					<p>Users</p>
+	<ul class="medium-block-grid-4">
+		@foreach($stats as $key => $stat)
+			<li>
+				<div class="panel text-center">
+					<h2>{{ $stat }}</h2>
+					<p>{{ $key }}</p>
 				</div>
-			</div>
-			<div class="col-md-3">
-				<div class="well text-center">
-					<div class="h1">{{ $stats['leagues'] }}</div>
-					<p>Leagues</p>
-				</div>
-			</div>
-			<div class="col-md-3">
-				<div class="well text-center">
-					<div class="h1">{{ $stats['movies'] }}</div>
-					<p>Movies</p>
-				</div>
-			</div>
-		</div>
+			</li>
+		@endforeach
+	</ul>
 
-	</div>
-</div>
+@endsection

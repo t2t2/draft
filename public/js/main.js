@@ -21,6 +21,9 @@ DRAFTR = {
 
 			// Mozilla Pesona stuff
 			this.personaHooks();
+
+			// Initialise foundaton
+			$(document).foundation();
 		},
 
 		personaHooks: function () {

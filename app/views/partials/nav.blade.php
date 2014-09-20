@@ -2,12 +2,12 @@
 	@if($item == 'divider')
 		<li class="divider"></li>
 	@else
-		<li{{ (isset($item['active']) && str_is($item['active'], Route::currentRouteName())) ? ' class="active"' : '' }}>
-			@if(isset($item['url']))
+		@if(isset($item['url']))
+			<li{{ (isset($item['active']) && str_is($item['active'], Route::currentRouteName())) ? ' class="active"' : '' }}>
 				<a href="{{ $item['url'] }}">{{ $item['text'] }}</a>
-			@else
-				{{ $item['text'] }}
-			@endif
-		</li>
+			</li>
+		@else
+			<li class="heading">{{ $item['text'] }}</li>
+		@endif
 	@endif
 @endforeach
