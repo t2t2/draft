@@ -78,7 +78,7 @@ App::down(function () {
 */
 
 require app_path() . '/filters.php';
-
+require app_path() . '/bindings.php';
 
 /*
  * Missing & Error pages
@@ -136,21 +136,6 @@ View::composer('layout.main', function ($view) {
 	}
 
 });
-
-
-/*
- * Route Model bindings
- */
-
-Route::bind('username', function($value) {
-	return User::where('username', $value)->firstOrFail();
-});
-
-Route::bind('league-slug', function($value) {
-	return League::where('slug', $value)->firstOrFail();
-});
-
-
 
 
 

@@ -1,6 +1,13 @@
 <?php
 
-class AdminController extends PageController {
+namespace Admin;
+
+use League;
+use Movie;
+use User;
+use View;
+
+class HomeController extends \AdminBaseController {
 
 	/**
 	 * Admin Homepage

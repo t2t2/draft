@@ -87,7 +87,6 @@ class League extends Eloquent implements SluggableInterface {
 		return $query->whereBetween('start_date', [$search_start, $search_end]);
 	}
 
-
 	/**
 	 * League's admins relationship (n:m)
 	 *
@@ -99,4 +98,18 @@ class League extends Eloquent implements SluggableInterface {
 	}
 
 
+	/**
+	 * Check if user is an admin of the league
+	 *
+	 * @param User $user
+	 *
+	 * @return bool
+	 */
+	public function userIsAdmin(User $user) {
+		if (isset($this->relations['admins'])) {
+			return $this->admins->contains($user);
+		} else {
+			return $this->admins()->where('user_id', $user->id)->count();
+		}
+	}
 }

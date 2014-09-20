@@ -33,7 +33,7 @@ $navbar = [
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Hi {{ Auth::user()->name }} <span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
-							<li><a href="{{ route('user.show', ['username' => Auth::user()->username]) }}">Profile</a></li>
+							<li><a href="{{ route('user.show', ['user' => Auth::user()->username]) }}">Profile</a></li>
 							<li><a href="#" data-persona="logout"><span>Logout</span></a></li>
 						</ul>
 					</li>

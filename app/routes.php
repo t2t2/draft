@@ -33,7 +33,7 @@ Route::group(['prefix' => 'auth'], function () {
 });
 
 // User profile
-Route::get('user/{username}', ['uses' => 'UserController@show', 'as' => 'user.show']);
+Route::get('user/{user}', ['uses' => 'UserController@show', 'as' => 'user.show']);
 
 // Leagues page
 Route::group(['prefix' => 'leagues'], function () {
@@ -46,12 +46,12 @@ Route::group(['prefix' => 'leagues'], function () {
 });
 
 
-Route::get('league/{league_slug}', ['uses' => 'LeagueController@show', 'as' => 'league.show']);
+Route::get('league/{league}', ['uses' => 'LeagueController@show', 'as' => 'league.show']);
 
 
 // Admin
-Route::group(['prefix' => 'admin', 'before' => ['auth', 'admin']], function () {
-	Route::get('/', ['uses' => 'AdminController@index', 'as' => 'admin.index']);
+Route::group(['prefix' => 'admin', 'before' => ['auth', 'admin'], 'namespace' => 'Admin'], function () {
+	Route::get('/', ['uses' => 'HomeController@index', 'as' => 'admin.index']);
 });
 
 /**
