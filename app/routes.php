@@ -45,8 +45,17 @@ Route::group(['prefix' => 'leagues'], function () {
 
 });
 
+Route::group(['prefix' => 'league/{league}'], function () {
+	Route::get('/', ['uses' => 'LeagueController@show', 'as' => 'league.show']);
 
-Route::get('league/{league}', ['uses' => 'LeagueController@show', 'as' => 'league.show']);
+	Route::group(['prefix' => 'admin', 'before' => ['auth', 'league.admin']], function () {
+
+		Route::get('settings', ['uses' => 'LeagueAdminController@settings', 'as' => 'league.admin.settings']);
+		Route::post('settings', ['uses' => 'LeagueAdminController@storeSettings', 'as' => 'league.admin.settings.store']);
+
+	});
+
+});
 
 
 // Admin

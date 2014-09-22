@@ -7,9 +7,9 @@
 			</div>
 			{{ Former::uneditable('email')->help('registration.help.email', ['class' => 'alert-box info'])->forceValue($email) }}
 			{{ Former::actions()
-				->small_submit('Register')
-				->small_reset(null, null, ['class' => 'secondary'])
-				->small_link('Cancel Registration', '#', ['data-persona' => 'logout', 'class' => 'secondary'])
+				->submit('Register')
+				->reset(null, null, ['class' => 'secondary'])
+				->link('Cancel Registration', '#', ['data-persona' => 'logout', 'class' => 'secondary'])
 			}}
 
 		{{ Former::close() }}

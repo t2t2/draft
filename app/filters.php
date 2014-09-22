@@ -11,14 +11,12 @@
 |
 */
 
-App::before(function($request)
-{
+App::before(function ($request) {
 	//
 });
 
 
-App::after(function($request, $response)
-{
+App::after(function ($request, $response) {
 	//
 });
 
@@ -33,24 +31,18 @@ App::after(function($request, $response)
 |
 */
 
-Route::filter('auth', function()
-{
-	if (Auth::guest())
-	{
-		if (Request::ajax())
-		{
+Route::filter('auth', function () {
+	if (Auth::guest()) {
+		if (Request::ajax()) {
 			return Response::make('Unauthorized', 401);
-		}
-		else
-		{
+		} else {
 			return Redirect::guest(route('auth.login.page'));
 		}
 	}
 });
 
 
-Route::filter('auth.basic', function()
-{
+Route::filter('auth.basic', function () {
 	return Auth::basic();
 });
 
@@ -65,8 +57,7 @@ Route::filter('auth.basic', function()
 |
 */
 
-Route::filter('guest', function()
-{
+Route::filter('guest', function () {
 	if (Auth::check()) return Redirect::to('/');
 });
 
@@ -81,20 +72,28 @@ Route::filter('guest', function()
 |
 */
 
-Route::filter('csrf', function()
-{
-	if (Session::token() != Input::get('_token'))
-	{
+Route::filter('csrf', function () {
+	if (Session::token() != Input::get('_token')) {
 		throw new Illuminate\Session\TokenMismatchException;
 	}
 });
 
-/*
+/**
  * Admin filter
  */
-Route::filter('admin', function() {
-	if(!Auth::check() || !Auth::user()->admin) return Redirect::to('/');
+Route::filter('admin', function () {
+	if (! Auth::check() || ! Auth::user()->admin) return Redirect::to('/');
 });
 
+/**
+ * League admin filter
+ */
 
+Route::filter('league.admin', function (\Illuminate\Routing\Route $route) {
+	/** @var League $league */
+	$league = $route->getParameter('league');
 
+	if (! $league->userIsAdmin(Auth::user())) {
+		App::abort(404);
+	}
+});

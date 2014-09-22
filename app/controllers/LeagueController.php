@@ -117,7 +117,7 @@ class LeagueController extends PageController {
 
 		// Create the league
 		$league = new League(Input::only([
-			'name', 'description', 'url', 'private', 'mode', 'money', 'units'
+			'name', 'description', 'url', 'private', 'money', 'units'
 		]));
 		$league->mode = 'bid';
 		$league->extra_weeks = Input::get('extra_weeks');
@@ -145,6 +145,8 @@ class LeagueController extends PageController {
 	public function show(League $league) {
 
 
+
 		$this->layout->content = View::make('league.show', compact('league'));
+		$this->layout->content->show_league_info = true;
 	}
 } 

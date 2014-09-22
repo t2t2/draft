@@ -1,9 +1,9 @@
-@extends('layout.leagues')
+@extends('layout.league')
 
 @section('layout.content')
-	<h2>Create a league</h2>
+	<h2>League settings</h2>
 
-	{{ Former::vertical_open()->route('league.store')->rules($validation_rules) }}
+	{{ Former::vertical_open()->route('league.admin.settings.store', ['league' => $league->slug])->rules($validation_rules)->populate($league) }}
 
 		<fieldset>
 			{{ Former::legend('League info') }}
