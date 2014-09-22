@@ -39,6 +39,7 @@ use Cviebrock\EloquentSluggable\SluggableTrait;
  * @method static \Illuminate\Database\Query\Builder|\League whereActive($value)
  * @method static \League season($year, $season)
  * @property-read \Illuminate\Database\Eloquent\Collection|\User[] $admins
+ * @property-read \Illuminate\Database\Eloquent\Collection|\LeagueMovie[] $movies
  */
 class League extends Eloquent implements SluggableInterface {
 
@@ -65,6 +66,24 @@ class League extends Eloquent implements SluggableInterface {
 		'save_to'    => 'slug',
 	];
 
+	/**
+	 * League's admins relationship (n:m)
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+	 */
+	public function admins() {
+		return $this->belongsToMany('User', 'league_admins')
+		            ->withTimestamps();
+	}
+
+	/**
+	 * League's movies relationship (1:n)
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+	 */
+	public function movies() {
+		return $this->hasMany('LeagueMovie');
+	}
 
 	/**
 	 * Search by season scope
@@ -86,17 +105,6 @@ class League extends Eloquent implements SluggableInterface {
 
 		return $query->whereBetween('start_date', [$search_start, $search_end]);
 	}
-
-	/**
-	 * League's admins relationship (n:m)
-	 *
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-	 */
-	public function admins() {
-		return $this->belongsToMany('User', 'league_admins')
-		            ->withTimestamps();
-	}
-
 
 	/**
 	 * Check if user is an admin of the league

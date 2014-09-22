@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder {
 		// Cleanup
 		$tables = [
 			'league_admins',
+			'league_movies',
 			'leagues',
 			'movie_earnings',
 			'movies',
@@ -44,6 +45,7 @@ class DatabaseSeeder extends Seeder {
 		$this->call('LeagueAdminsTableSeeder');
 		$this->call('MovieTableSeeder');
 		$this->call('MovieEarningsTableSeeder');
+		$this->call('LeagueMoviesTableSeeder');
 	}
 
 }
