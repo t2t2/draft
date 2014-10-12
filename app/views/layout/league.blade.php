@@ -62,6 +62,10 @@ if(Auth::check() && $league->userIsAdmin(Auth::user())) {
 		'text' => 'Settings', 'url' => route('league.admin.settings', ['league' => $league->slug]),
 		'active' => 'league.admin.settings'
 	];
+	$navs[] = [
+		'text' => 'Movies', 'url' => route('league.admin.movies', ['league' => $league->slug]),
+		'active' => 'league.admin.movies'
+	];
 }
 ?>
 		<nav>

@@ -13,13 +13,14 @@
  * @property integer $latest_earnings_id
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
- * @method static \Illuminate\Database\Query\Builder|\LeagueMovie whereId($value) 
- * @method static \Illuminate\Database\Query\Builder|\LeagueMovie whereLeagueId($value) 
- * @method static \Illuminate\Database\Query\Builder|\LeagueMovie whereMovieId($value) 
- * @method static \Illuminate\Database\Query\Builder|\LeagueMovie wherePrice($value) 
- * @method static \Illuminate\Database\Query\Builder|\LeagueMovie whereLatestEarningsId($value) 
- * @method static \Illuminate\Database\Query\Builder|\LeagueMovie whereCreatedAt($value) 
- * @method static \Illuminate\Database\Query\Builder|\LeagueMovie whereUpdatedAt($value) 
+ * @method static \Illuminate\Database\Query\Builder|\LeagueMovie whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|\LeagueMovie whereLeagueId($value)
+ * @method static \Illuminate\Database\Query\Builder|\LeagueMovie whereMovieId($value)
+ * @method static \Illuminate\Database\Query\Builder|\LeagueMovie wherePrice($value)
+ * @method static \Illuminate\Database\Query\Builder|\LeagueMovie whereLatestEarningsId($value)
+ * @method static \Illuminate\Database\Query\Builder|\LeagueMovie whereCreatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\LeagueMovie whereUpdatedAt($value)
+ * @method static \LeagueMovie ordered()
  */
 class LeagueMovie extends Eloquent {
 
@@ -50,4 +51,17 @@ class LeagueMovie extends Eloquent {
 	public function latestEarnings() {
 		return $this->belongsTo('MovieEarning');
 	}
+
+
+	/**
+	 * Order movies by the release date
+	 *
+	 * @param \Illuminate\Database\Eloquent\Builder $query
+	 */
+	public function scopeOrdered(Illuminate\Database\Eloquent\Builder $query) {
+		$query->join('movies', 'league_movies.movie_id', '=', 'movies.id');
+		$query->orderBy('movies.release', 'ASC');
+		$query->select('league_movies.*');
+	}
+
 }

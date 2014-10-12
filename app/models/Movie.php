@@ -6,6 +6,7 @@
  * @property integer                                                       $id
  * @property string                                                        $name
  * @property string                                                        $boxmojo_id
+ * @property string                                                        $boxoffice_id
  * @property \Carbon\Carbon                                                $release
  * @property integer                                                       $latest_earnings_id
  * @property \Carbon\Carbon                                                $created_at
@@ -19,6 +20,7 @@
  * @method static \Illuminate\Database\Query\Builder|\Movie whereLatestEarningsId($value)
  * @method static \Illuminate\Database\Query\Builder|\Movie whereCreatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\Movie whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\Movie whereBoxofficeId($value)
  */
 class Movie extends Eloquent {
 
@@ -32,7 +34,7 @@ class Movie extends Eloquent {
 	 * Allow filling of these fields
 	 * @var array
 	 */
-	protected $fillable = ['name', 'boxmojo_id', 'release'];
+	protected $fillable = ['name', 'boxmojo_id', 'boxoffice_id', 'release'];
 
 	/**
 	 * All movie's earnings

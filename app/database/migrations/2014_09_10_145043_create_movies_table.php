@@ -15,6 +15,7 @@ class CreateMoviesTable extends Migration {
 			$table->increments('id');
 			$table->string('name');
 			$table->string('boxmojo_id');
+			$table->string('boxoffice_id');
 			$table->date('release');
 			$table->unsignedInteger('latest_earnings_id')->nullable();
 			$table->timestamps();

@@ -6,7 +6,8 @@
 		"edvinaskrucas/notification": "3.*",
 		"guzzlehttp/guzzle": "4.2.*",
 		"cviebrock/eloquent-sluggable": "2.*",
-		"binarix/foundation-pagination": "1.0.0"
+		"binarix/foundation-pagination": "1.0.0",
+		"fabpot/goutte": "~2.0"
 	},
 	"require-dev": {
 		"barryvdh/laravel-ide-helper": "1.*",
@@ -19,6 +20,7 @@
 			"app/commands",
 			"app/controllers",
 			"app/models",
+			"app/workers",
 			"app/database/migrations",
 			"app/database/seeds",
 			"app/tests/TestCase.php"

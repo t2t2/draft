@@ -53,6 +53,10 @@ Route::group(['prefix' => 'league/{league}'], function () {
 		Route::get('settings', ['uses' => 'LeagueAdminController@settings', 'as' => 'league.admin.settings']);
 		Route::post('settings', ['uses' => 'LeagueAdminController@storeSettings', 'as' => 'league.admin.settings.store']);
 
+		Route::get('movies', ['uses' => 'LeagueAdminController@movies', 'as' => 'league.admin.movies']);
+
+
+		Route::post('movies/remove', ['uses' => 'LeagueAdminController@removeMovie', 'as' => 'league.admin.movies.remove']);
 	});
 
 });
