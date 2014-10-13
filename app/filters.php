@@ -93,6 +93,9 @@ Route::filter('league.admin', function (\Illuminate\Routing\Route $route) {
 	/** @var League $league */
 	$league = $route->getParameter('league');
 
+	// Safe to assume preloading
+	$league->load('admins');
+
 	if (! $league->userIsAdmin(Auth::user())) {
 		App::abort(404);
 	}

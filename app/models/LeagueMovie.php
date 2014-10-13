@@ -24,6 +24,12 @@
  */
 class LeagueMovie extends Eloquent {
 
+	/**
+	 * The attributes that are mass assignable.
+	 *
+	 * @type array
+	 */
+	protected $fillable = ['league_id', 'movie_id', 'latest_earnings_id', 'price'];
 
 	/**
 	 * The league this entry is in

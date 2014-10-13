@@ -1,25 +1,26 @@
 <?php
 use Cviebrock\EloquentSluggable\SluggableInterface;
 use Cviebrock\EloquentSluggable\SluggableTrait;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * League
  *
- * @property integer                                               $id
- * @property string                                                $name
- * @property string                                                $slug
- * @property string                                                $description
- * @property string                                                $url
- * @property string                                                $mode
- * @property integer                                               $money
- * @property string                                                $units
- * @property integer                                               $extra_weeks
- * @property \Carbon\Carbon                                        $start_date
- * @property \Carbon\Carbon                                        $end_date
- * @property boolean                                               $private
- * @property boolean                                               $featured
- * @property \Carbon\Carbon                                        $created_at
- * @property \Carbon\Carbon                                        $updated_at
+ * @property integer                                                      $id
+ * @property string                                                       $name
+ * @property string                                                       $slug
+ * @property string                                                       $description
+ * @property string                                                       $url
+ * @property string                                                       $mode
+ * @property integer                                                      $money
+ * @property string                                                       $units
+ * @property integer                                                      $extra_weeks
+ * @property \Carbon\Carbon                                               $start_date
+ * @property \Carbon\Carbon                                               $end_date
+ * @property boolean                                                      $private
+ * @property boolean                                                      $featured
+ * @property \Carbon\Carbon                                               $created_at
+ * @property \Carbon\Carbon                                               $updated_at
  * @method static \Illuminate\Database\Query\Builder|\League whereId($value)
  * @method static \Illuminate\Database\Query\Builder|\League whereName($value)
  * @method static \Illuminate\Database\Query\Builder|\League whereSlug($value)
@@ -35,10 +36,10 @@ use Cviebrock\EloquentSluggable\SluggableTrait;
  * @method static \Illuminate\Database\Query\Builder|\League whereFeatured($value)
  * @method static \Illuminate\Database\Query\Builder|\League whereCreatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\League whereUpdatedAt($value)
- * @property boolean                                               $active
+ * @property boolean                                                      $active
  * @method static \Illuminate\Database\Query\Builder|\League whereActive($value)
  * @method static \League season($year, $season)
- * @property-read \Illuminate\Database\Eloquent\Collection|\User[] $admins
+ * @property-read \Illuminate\Database\Eloquent\Collection|\User[]        $admins
  * @property-read \Illuminate\Database\Eloquent\Collection|\LeagueMovie[] $movies
  */
 class League extends Eloquent implements SluggableInterface {
@@ -119,5 +120,42 @@ class League extends Eloquent implements SluggableInterface {
 		} else {
 			return $this->admins()->where('user_id', $user->id)->count();
 		}
+	}
+
+	/**
+	 * Update league's dates
+	 */
+	public function updateLeagueDates() {
+		/** @var Collection|LeagueMovie[] $movies */
+		$movies = $this->movies()->with('movie')->ordered()->get(); // Get up to date data
+
+		if ($movies->count()) {
+			/** @var Movie $earliest */
+			$earliest = $movies->first()->movie;
+			/** @var Movie $latest */
+			$latest = $movies->last()->movie;
+
+			// Start date = Earliest release, End date = Last release + extra weeks
+			$this->start_date = $earliest->release;
+			$this->end_date = $latest->release->copy()->addWeeks($this->extra_weeks);
+
+			// The draft length must not be longer than the hard-coded limit
+			$max_date = $this->start_date->copy()->addWeeks(Config::get('draft.maximum_weeks'));
+			if ($this->end_date > $max_date) {
+				$this->end_date = $max_date;
+			}
+		} else {
+			// No movies = Start and end date well in the future
+			$this->start_date = $this->end_date = Carbon::now()->addWeeks(Config::get('draft.maximum_weeks'));
+		}
+	}
+
+	/**
+	 * Calculate the last
+	 *
+	 * @return Carbon
+	 */
+	public function maxLastMovieDate() {
+		return $this->start_date->copy()->addWeeks(Config::get('draft.maximum_weeks'))->subWeeks($this->extra_weeks);
 	}
 }

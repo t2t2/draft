@@ -48,9 +48,11 @@ class MovieScraperWorker {
 	 * @return Collection|array[]
 	 */
 	private function getMovies() {
+		// Limit the scraped movie release date to the max length of the league
 		$limit = Carbon::now()->addWeeks(Config::get('draft.maximum_weeks'));
-		$crawler = $this->client->request('GET', $this->url, []);
 
+		$crawler = $this->client->request('GET', $this->url, []);
+		// Generate a list of movies
 		$movies = $crawler->filter('.data_table tbody tr')->each(function (Crawler $node) use ($limit) {
 
 			$cols = $node->children();

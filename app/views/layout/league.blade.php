@@ -1,6 +1,6 @@
 <div class="row">
 	<div class="small-12 column">
-		<h1>{{ $league->name }}</h1>
+		<h1>{{{ $league->name }}}</h1>
 	</div>
 </div>
 
@@ -18,7 +18,7 @@
 		<div class="medium-3 column">
 			<h4>League Settings</h4>
 			<ul class="no-bullet">
-				<li>Money: {{ $league->money }}{{ $league->units }}</li>
+				<li>Money: {{ $league->money }}{{{ $league->units }}}</li>
 			</ul>
 		</div>
 		<div class="medium-3 column">

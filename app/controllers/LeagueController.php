@@ -66,12 +66,12 @@ class LeagueController extends PageController {
 
 		// Where the user is an admin
 		$leagues_query->join('league_admins', function ($join) {
-			$join->on('leagues.id', '=', 'league_admins.league_id')
-			     ->where('league_admins.user_id', '=', Auth::user()->id);
+			$join->on('leagues.id', '=', 'league_admins.league_id');
 		});
+		$leagues_query->where('league_admins.user_id', Auth::user()->id);
 
 		$leagues_query->orderBy('start_date', 'desc');
-		$leagues = $leagues_query->paginate(10);
+		$leagues = $leagues_query->paginate(10, ['leagues.*']);
 
 		// Output
 		$this->layout->title = 'My Leagues';
