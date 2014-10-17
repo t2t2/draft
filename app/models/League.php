@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Collection;
  * @property \Carbon\Carbon                                               $end_date
  * @property boolean                                                      $private
  * @property boolean                                                      $featured
+ * @property boolean                                                      $active
  * @property \Carbon\Carbon                                               $created_at
  * @property \Carbon\Carbon                                               $updated_at
  * @method static \Illuminate\Database\Query\Builder|\League whereId($value)
@@ -34,13 +35,13 @@ use Illuminate\Database\Eloquent\Collection;
  * @method static \Illuminate\Database\Query\Builder|\League whereEndDate($value)
  * @method static \Illuminate\Database\Query\Builder|\League wherePrivate($value)
  * @method static \Illuminate\Database\Query\Builder|\League whereFeatured($value)
+ * @method static \Illuminate\Database\Query\Builder|\League whereActive($value)
  * @method static \Illuminate\Database\Query\Builder|\League whereCreatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\League whereUpdatedAt($value)
- * @property boolean                                                      $active
- * @method static \Illuminate\Database\Query\Builder|\League whereActive($value)
  * @method static \League season($year, $season)
  * @property-read \Illuminate\Database\Eloquent\Collection|\User[]        $admins
  * @property-read \Illuminate\Database\Eloquent\Collection|\LeagueMovie[] $movies
+ * @property-read \Illuminate\Database\Eloquent\Collection|\LeagueTeam[]  $teams
  */
 class League extends Eloquent implements SluggableInterface {
 
@@ -84,6 +85,15 @@ class League extends Eloquent implements SluggableInterface {
 	 */
 	public function movies() {
 		return $this->hasMany('LeagueMovie');
+	}
+
+	/**
+	 * League's teams relationship (1:n)
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+	 */
+	public function teams() {
+		return $this->hasMany('LeagueTeam');
 	}
 
 	/**

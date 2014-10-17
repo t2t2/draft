@@ -119,7 +119,7 @@ class LeagueAdminController extends PageController {
 		}
 
 		$league->updateLeagueDates();
-		
+
 		Notification::success(count($movies) . ' movie(s) have been added!');
 
 		return Redirect::route('league.admin.movies', ['league' => $league->slug]);
@@ -182,5 +182,64 @@ class LeagueAdminController extends PageController {
 
 		return [$date_range, $movies];
 	}
+
+
+	/**
+	 * Display admins for the league
+	 *
+	 * @param League $league
+	 */
+	public function admins(League $league) {
+		$this->layout->content = View::make('league.admin.admins', compact('league'));
+	}
+
+	/**
+	 * Add admins to the league
+	 *
+	 * @param League $league
+	 *
+	 * @return \Illuminate\Http\RedirectResponse
+	 */
+	public function addAdmin(League $league) {
+		$user = User::whereUsername(Input::get('username'))->first();
+
+		if (! $user) {
+			Notification::error('User not found');
+
+			return Redirect::back()->withInput();
+		}
+		if (! $league->admins()->where('users.id', $user->id)->count()) {
+			$league->admins()->attach($user);
+
+			Notification::success('Admin added');
+		} else {
+			Notification::warning('User is already an admin');
+		}
+
+		return Redirect::back();
+	}
+
+	/**
+	 * Remove an admin from the league
+	 *
+	 * @param League $league
+	 *
+	 * @return \Illuminate\Http\RedirectResponse
+	 */
+	public function removeAdmin(League $league) {
+		$user = $league->admins()->where('users.id', Input::get('user'))->first();
+
+		if (! $user) {
+			Notification::warning('User isn\'t an admin');
+		} elseif($user->id == Auth::user()->id) {
+			Notification::error('You can\'t remove yourself');
+		} else {
+			$league->admins()->detach($user->id);
+			Notification::success('User removed from admins');
+		}
+
+		return Redirect::back();
+	}
+
 
 } 

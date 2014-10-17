@@ -143,7 +143,7 @@ class LeagueController extends PageController {
 	 * @param League $league
 	 */
 	public function show(League $league) {
-
+		$league->load('teams');
 
 
 		$this->layout->content = View::make('league.show', compact('league'));

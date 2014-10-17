@@ -60,6 +60,10 @@ Route::group(['prefix' => 'league/{league}'], function () {
 
 
 		Route::post('movies/remove', ['uses' => 'LeagueAdminController@removeMovie', 'as' => 'league.admin.movies.remove']);
+
+		Route::get('admins', ['uses' => 'LeagueAdminController@admins', 'as' => 'league.admin.admins']);
+		Route::post('admins/add', ['uses' => 'LeagueAdminController@addAdmin', 'as' => 'league.admin.admins.add']);
+		Route::post('admins/remove', ['uses' => 'LeagueAdminController@removeAdmin', 'as' => 'league.admin.admins.remove']);
 	});
 
 });

@@ -12,7 +12,7 @@
 	</div>
 
 
-	{{ Former::raw_open()->route('league.admin.movies.remove', ['league' => $league->slug]) }}
+	{{ Form::open(['route' => ['league.admin.movies.remove', 'league' => $league->slug]]) }}
 
 		<table>
 			<thead>
@@ -30,7 +30,7 @@
 						</td>
 						<td>
 							<ul class="button-group">
-								<li><a href="#" class="button tiny"><i class="fa fa-exchange"></i></a></li>
+								<li><a href="#" class="button tiny disabled"><i class="fa fa-exchange"></i></a></li>
 								<li><button class="tiny alert" type="submit" name="movie" value="{{ $movie->id }}"><i class="fa fa-remove"></i></button></li>
 							</ul>
 						</td>
@@ -44,7 +44,7 @@
 
 		</table>
 
-	{{ Former::close() }}
+	{{ Form::close() }}
 
 
 @endsection

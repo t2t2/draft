@@ -13,7 +13,7 @@
 		"barryvdh/laravel-ide-helper": "1.*",
 		"doctrine/dbal": "~2.3",
 		"barryvdh/laravel-debugbar": "1.*",
-		"phpunit/phpunit": "4.2.*"
+		"phpunit/phpunit": "4.3.*"
 	},
 	"autoload": {
 		"classmap": [
