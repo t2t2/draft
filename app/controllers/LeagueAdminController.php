@@ -183,6 +183,92 @@ class LeagueAdminController extends PageController {
 		return [$date_range, $movies];
 	}
 
+	public $team_valiation_rules = [
+		'username'  => ['required', 'exists:users,username'],
+		'team_name' => ['required', 'between:1,64'],
+	];
+
+	/**
+	 * Show user's teams
+	 *
+	 * @param League $league
+	 */
+	public function teams(League $league) {
+		$validation_rules = $this->team_valiation_rules;
+
+		$league->load('teams', 'teams.users');
+
+		$this->layout->content = View::make('league.admin.teams', compact('league', 'validation_rules'));
+	}
+
+
+	/**
+	 * Add a team to the league
+	 *
+	 * @param League $league
+	 *
+	 * @return $this|\Illuminate\Http\RedirectResponse
+	 */
+	public function addTeam(League $league) {
+		$validation = Validator::make(Input::all(), $this->team_valiation_rules);
+		if ($validation->fails()) {
+			Notification::error('Please check your input and try again');
+
+			return Redirect::back()->withInput()->withErrors($validation);
+		}
+
+		$user = User::whereUsername(Input::get('username'))->first();
+
+		// Check if user is already in a team
+		$check = DB::table('league_teams')
+		           ->where('league_teams.league_id', $league->id)
+		           ->join('league_team_user', 'league_teams.id', '=', 'league_team_user.league_team_id')
+		           ->where('league_team_user.user_id', $user->id)->count();
+
+		if ($check) {
+			Notification::error('This user is already in a team in this league');
+
+			return Redirect::back()->withInput();
+		}
+
+		// All good
+		DB::beginTransaction();
+
+		/** @type LeagueTeam $team */
+		$team = $league->teams()->create(['name' => Input::get('team_name')]);
+		$team->users()->attach($user->id);
+
+		DB::commit();
+
+		Notification::success('Team has been added to your league!');
+
+		return Redirect::back();
+	}
+
+	/**
+	 * Removing a team from the league.
+	 *
+	 * @param League $league
+	 *
+	 * @return \Illuminate\Http\RedirectResponse
+	 * @throws Exception
+	 */
+	public function removeTeam(League $league) {
+		/** @type LeagueTeam $team */
+		$team = $league->teams()->where('id', Input::get('team'))->first();
+
+		if(!$team) {
+			Notification::error('Team not found');
+
+			return Redirect::back();
+		}
+
+		$team->delete();
+
+		Notification::success('Team has been removed');
+
+		return Redirect::back();
+	}
 
 	/**
 	 * Display admins for the league
@@ -231,7 +317,7 @@ class LeagueAdminController extends PageController {
 
 		if (! $user) {
 			Notification::warning('User isn\'t an admin');
-		} elseif($user->id == Auth::user()->id) {
+		} elseif ($user->id == Auth::user()->id) {
 			Notification::error('You can\'t remove yourself');
 		} else {
 			$league->admins()->detach($user->id);

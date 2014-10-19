@@ -14,6 +14,7 @@
  * @method static \Illuminate\Database\Query\Builder|\LeagueTeam whereCreatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\LeagueTeam whereUpdatedAt($value)
  * @property-read \League   $league
+ * @property-read \Illuminate\Database\Eloquent\Collection|\User[] $users
  */
 class LeagueTeam extends Eloquent {
 
@@ -28,4 +29,12 @@ class LeagueTeam extends Eloquent {
 		return $this->belongsTo('League');
 	}
 
+	/**
+	 * The users that are in this team
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+	 */
+	public function users() {
+		return $this->belongsToMany('User');
+	}
 }

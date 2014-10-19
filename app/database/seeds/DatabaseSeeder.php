@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder {
 		$tables = [
 			'league_admins',
 			'league_movies',
+			'league_team_user',
 			'league_teams',
 			'leagues',
 			'movie_earnings',
@@ -48,6 +49,7 @@ class DatabaseSeeder extends Seeder {
 		$this->call('MovieEarningsTableSeeder');
 		$this->call('LeagueMoviesTableSeeder');
 		$this->call('LeagueTeamsTableSeeder');
+		$this->call('LeagueTeamUsersTableSeeder');
 	}
 
 }

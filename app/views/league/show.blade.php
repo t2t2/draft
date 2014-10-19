@@ -5,8 +5,11 @@
 
 	<ol>
 		@forelse($league->teams as $team)
+			<?php
+			$profiles = $team->users->map(function($user) { return link_to_route('user.show', $user->name, ['user' => $user->username]); })->all();
+			?>
 			<li class="panel">
-				<h5>{{{ $team->name }}} <small>{{-- Team members --}}</small></h5>
+				<h5>{{{ $team->name }}} <small>{{ implode(', ', $profiles)}}</small></h5>
 				<p>Movies:</p>
 			</li>
 		@empty

@@ -62,15 +62,16 @@ class LeagueController extends PageController {
 		$leagues_query = League::query();
 
 		// Where the user is a player
-		// TODO
+		$leagues_query->leftJoin('league_teams', 'leagues.id', '=', 'league_teams.league_id');
+		$leagues_query->leftJoin('league_team_user', 'league_teams.id', '=', 'league_team_user.league_team_id');
+		$leagues_query->where('league_team_user.user_id', Auth::user()->id);
 
 		// Where the user is an admin
-		$leagues_query->join('league_admins', function ($join) {
-			$join->on('leagues.id', '=', 'league_admins.league_id');
-		});
-		$leagues_query->where('league_admins.user_id', Auth::user()->id);
+		$leagues_query->leftJoin('league_admins', 'leagues.id', '=', 'league_admins.league_id');
+		$leagues_query->orWhere('league_admins.user_id', Auth::user()->id);
 
 		$leagues_query->orderBy('start_date', 'desc');
+		$leagues_query->select('leagues.*');
 		$leagues = $leagues_query->paginate(10, ['leagues.*']);
 
 		// Output
@@ -143,7 +144,7 @@ class LeagueController extends PageController {
 	 * @param League $league
 	 */
 	public function show(League $league) {
-		$league->load('teams');
+		$league->load('teams', 'teams.users');
 
 
 		$this->layout->content = View::make('league.show', compact('league'));
