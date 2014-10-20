@@ -24,7 +24,7 @@ class CreateMovieEarningsTable extends Migration {
 			});
 
 			Schema::table('movies', function (Blueprint $table) {
-				$table->foreign('latest_earnings_id')->references('id')->on('movie_earnings')->onUpdate('cascade')
+				$table->foreign('latest_earnings_id')->references('id')->on('movie_earnings')->onUpdate('set null')
 				      ->onDelete('cascade');
 			});
 

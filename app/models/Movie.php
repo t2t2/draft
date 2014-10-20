@@ -21,6 +21,7 @@
  * @method static \Illuminate\Database\Query\Builder|\Movie whereCreatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\Movie whereUpdatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\Movie whereBoxofficeId($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection|\League[] $leagues
  */
 class Movie extends Eloquent {
 
@@ -52,5 +53,14 @@ class Movie extends Eloquent {
 	 */
 	public function latestEarnings() {
 		return $this->belongsTo('MovieEarning');
+	}
+
+	/**
+	 * Leagues this movie is used in
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+	 */
+	public function leagues() {
+		return $this->belongsToMany('League', 'league_movies');
 	}
 }

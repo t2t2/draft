@@ -40,6 +40,9 @@ class MovieScraperWorker {
 
 		$this->scanDatabaseForChanges($movies);
 
+		Log::info('Releases researched', [count($movies)]);
+
+		$job->delete();
 	}
 
 	/**

@@ -281,7 +281,9 @@ class LeagueAdminController extends PageController {
 	 * @return \Illuminate\Http\RedirectResponse|\Illuminate\View\View
 	 */
 	public function draft(League $league) {
-		$league->load('movies', 'movies.movie', 'movies.teams', 'teams');
+		$league->load(['movies' => function($query) {
+			$query->ordered();
+		}, 'movies.movie', 'movies.teams', 'teams']);
 
 		if ($league->movies->count() == 0) {
 			Notification::error('You need to add more movies before being able to draft');
@@ -370,12 +372,12 @@ class LeagueAdminController extends PageController {
 
 		}
 
-		Notification::success("{$changes} have been saved!");
+		Notification::success("{$changes} changes have been saved!");
 
 		// Active league check
 		$active_check = DB::table('league_team_movies')->whereIn('league_team_id', $teams->modelKeys())->count();
 
-		$league->active = (bool) $active_check;
+		$league->active = $active_check ? 1 : 0;
 		if($league->isDirty()) {
 			$league->save();
 

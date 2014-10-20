@@ -12,3 +12,4 @@
 */
 
 Artisan::resolve('ScrapeUpcomingReleasesCommand');
+Artisan::resolve('ScrapeEarningsCommand');

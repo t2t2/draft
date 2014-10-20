@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
 class LeagueController extends PageController {
@@ -64,16 +65,16 @@ class LeagueController extends PageController {
 		$leagues_query = League::query();
 
 		// Where the user is a player
-		$leagues_query->whereExists(function(\Illuminate\Database\Query\Builder $query) {
+		$leagues_query->whereExists(function (\Illuminate\Database\Query\Builder $query) {
 			$query->select(DB::raw(1))
-				->from('league_teams')
-				->join('league_team_user', 'league_teams.id', '=', 'league_team_user.league_team_id')
-				->where('league_team_user.user_id', Auth::user()->id)
-				->whereRaw('league_teams.league_id = leagues.id');
+			      ->from('league_teams')
+			      ->join('league_team_user', 'league_teams.id', '=', 'league_team_user.league_team_id')
+			      ->where('league_team_user.user_id', Auth::user()->id)
+			      ->whereRaw('league_teams.league_id = leagues.id');
 		});
 
 		// Where the user is an admin
-		$leagues_query->orWhereExists(function(\Illuminate\Database\Query\Builder $query) {
+		$leagues_query->orWhereExists(function (\Illuminate\Database\Query\Builder $query) {
 			$query->select(DB::raw(1))
 			      ->from('league_admins')
 			      ->where('league_admins.user_id', Auth::user()->id)
@@ -154,20 +155,22 @@ class LeagueController extends PageController {
 	 * @param League $league
 	 */
 	public function show(League $league) {
-		$league->load('teams', 'teams.users', 'teams.movies', 'teams.movies.movie');
+		$league->load(['teams', 'teams.users', 'teams.movies' => function($query) {
+			$query->ordered();
+		}, 'teams.movies.movie']);
 
 		// Pre-do some work for teams and sort them by earnings
 		$teams = new Collection();
 
-		foreach($league->teams as $team) {
-			$earnings = $team->movies->reduce(function($total, LeagueMovie $movie) {
-				if($movie->latestEarnings) {
+		foreach ($league->teams as $team) {
+			$earnings = $team->movies->reduce(function ($total, LeagueMovie $movie) {
+				if ($movie->latestEarnings) {
 					return $total + $movie->latestEarnings->domestic;
 				} else {
 					return $total;
 				}
 			}, 0);
-			$paid_for = $team->movies->reduce(function($total, LeagueMovie $movie) {
+			$paid_for = $team->movies->reduce(function ($total, LeagueMovie $movie) {
 				return $total + $movie->price;
 			}, 0);
 			$teams->push(compact('team', 'earnings', 'paid_for'));
