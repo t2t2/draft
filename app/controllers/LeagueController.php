@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Collection;
+
 class LeagueController extends PageController {
 
 
@@ -144,10 +146,27 @@ class LeagueController extends PageController {
 	 * @param League $league
 	 */
 	public function show(League $league) {
-		$league->load('teams', 'teams.users');
+		$league->load('teams', 'teams.users', 'teams.movies', 'teams.movies.movie');
 
+		// Pre-do some work for teams and sort them by earnings
+		$teams = new Collection();
 
-		$this->layout->content = View::make('league.show', compact('league'));
+		foreach($league->teams as $team) {
+			$earnings = $team->movies->reduce(function($total, LeagueMovie $movie) {
+				if($movie->latestEarnings) {
+					return $total + $movie->latestEarnings->domestic;
+				} else {
+					return $total;
+				}
+			}, 0);
+			$paid_for = $team->movies->reduce(function($total, LeagueMovie $movie) {
+				return $total + $movie->price;
+			}, 0);
+			$teams->push(compact('team', 'earnings', 'paid_for'));
+		}
+		$teams->sortByDesc('earnings');
+
+		$this->layout->content = View::make('league.show', compact('league', 'teams'));
 		$this->layout->content->show_league_info = true;
 	}
 } 

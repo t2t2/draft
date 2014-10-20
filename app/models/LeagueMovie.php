@@ -21,6 +21,7 @@
  * @method static \Illuminate\Database\Query\Builder|\LeagueMovie whereCreatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\LeagueMovie whereUpdatedAt($value)
  * @method static \LeagueMovie ordered()
+ * @property-read \Illuminate\Database\Eloquent\Collection|\LeagueTeam[] $teams
  */
 class LeagueMovie extends Eloquent {
 
@@ -47,6 +48,15 @@ class LeagueMovie extends Eloquent {
 	 */
 	public function movie() {
 		return $this->belongsTo('Movie');
+	}
+
+	/**
+	 * Teams this movie is owned by
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+	 */
+	public function teams() {
+		return $this->belongsToMany('LeagueTeam', 'league_team_movies')->withTimestamps();
 	}
 
 	/**
