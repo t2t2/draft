@@ -13,3 +13,4 @@
 
 Artisan::resolve('ScrapeUpcomingReleasesCommand');
 Artisan::resolve('ScrapeEarningsCommand');
+Artisan::resolve('MigrateOldDatabase');
