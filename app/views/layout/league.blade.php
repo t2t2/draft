@@ -19,6 +19,8 @@
 			<h4>League Settings</h4>
 			<ul class="no-bullet">
 				<li>Money: {{ $league->money }}{{{ $league->units }}}</li>
+				<li>Start date: {{{ $league->start_date->toFormattedDateString() }}} </li>
+				<li>End date: {{{ $league->end_date->toFormattedDateString() }}}</li>
 			</ul>
 		</div>
 		<div class="medium-3 column">
@@ -42,7 +44,7 @@
 				<ul>
 					<li>Add movies to your league</li>
 					<li>Add teams to your league</li>
-					<li>Draft your movies to the teams</li>
+					<li>Draft the movies to the teams</li>
 				</ul>
 			</div>
 		</div>
@@ -69,6 +71,10 @@ if(Auth::check() && $league->userIsAdmin(Auth::user())) {
 	$navs[] = [
 		'text' => 'Teams', 'url' => route('league.admin.teams', ['league' => $league->slug]),
 		'active' => 'league.admin.teams'
+	];
+	$navs[] = [
+		'text' => 'Draft', 'url' => route('league.admin.draft', ['league' => $league->slug]),
+		'active' => 'league.admin.draft'
 	];
 	$navs[] = [
 		'text' => 'Admins', 'url' => route('league.admin.admins', ['league' => $league->slug]),

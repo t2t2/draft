@@ -64,17 +64,25 @@ class LeagueController extends PageController {
 		$leagues_query = League::query();
 
 		// Where the user is a player
-		$leagues_query->leftJoin('league_teams', 'leagues.id', '=', 'league_teams.league_id');
-		$leagues_query->leftJoin('league_team_user', 'league_teams.id', '=', 'league_team_user.league_team_id');
-		$leagues_query->where('league_team_user.user_id', Auth::user()->id);
+		$leagues_query->whereExists(function(\Illuminate\Database\Query\Builder $query) {
+			$query->select(DB::raw(1))
+				->from('league_teams')
+				->join('league_team_user', 'league_teams.id', '=', 'league_team_user.league_team_id')
+				->where('league_team_user.user_id', Auth::user()->id)
+				->whereRaw('league_teams.league_id = leagues.id');
+		});
 
 		// Where the user is an admin
-		$leagues_query->leftJoin('league_admins', 'leagues.id', '=', 'league_admins.league_id');
-		$leagues_query->orWhere('league_admins.user_id', Auth::user()->id);
+		$leagues_query->orWhereExists(function(\Illuminate\Database\Query\Builder $query) {
+			$query->select(DB::raw(1))
+			      ->from('league_admins')
+			      ->where('league_admins.user_id', Auth::user()->id)
+			      ->whereRaw('league_admins.league_id = leagues.id');
+		});
 
 		$leagues_query->orderBy('start_date', 'desc');
 		$leagues_query->select('leagues.*');
-		$leagues = $leagues_query->paginate(10, ['leagues.*']);
+		$leagues = $leagues_query->paginate(10);
 
 		// Output
 		$this->layout->title = 'My Leagues';

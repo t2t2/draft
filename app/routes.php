@@ -65,6 +65,9 @@ Route::group(['prefix' => 'league/{league}'], function () {
 		Route::post('teams/add', ['uses' => 'LeagueAdminController@addTeam', 'as' => 'league.admin.teams.add']);
 		Route::post('teams/remove', ['uses' => 'LeagueAdminController@removeTeam', 'as' => 'league.admin.teams.remove']);
 
+		Route::get('draft', ['uses' => 'LeagueAdminController@draft', 'as' => 'league.admin.draft']);
+		Route::post('draft', ['uses' => 'LeagueAdminController@storeDraft', 'as' => 'league.admin.draft.store']);
+
 		Route::get('admins', ['uses' => 'LeagueAdminController@admins', 'as' => 'league.admin.admins']);
 		Route::post('admins/add', ['uses' => 'LeagueAdminController@addAdmin', 'as' => 'league.admin.admins.add']);
 		Route::post('admins/remove', ['uses' => 'LeagueAdminController@removeAdmin', 'as' => 'league.admin.admins.remove']);

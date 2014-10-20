@@ -30,8 +30,8 @@
 						</td>
 						<td>
 							<ul class="button-group">
-								<li><a href="#" class="button tiny disabled"><i class="fa fa-exchange"></i></a></li>
-								<li><button class="tiny alert" type="submit" name="movie" value="{{ $movie->id }}"><i class="fa fa-remove"></i></button></li>
+								<li><a href="javascript:void(0);" class="button tiny disabled" title="Ability to switch movies isn't currently available."><i class="fa fa-exchange"></i></a></li>
+								<li><button class="tiny alert" type="submit" name="movie" value="{{ $movie->id }}" title="Remove movie"><i class="fa fa-remove"></i></button></li>
 							</ul>
 						</td>
 					</tr>

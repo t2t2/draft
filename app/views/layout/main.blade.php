@@ -17,4 +17,14 @@
 
 	{{ $content }}
 
+	<div class="row">
+		<div class="small-12 column">
+			<hr/>
+
+			<footer>
+				Box Office Draft is brought to you by the free time of @<a href="http://twitter.com/t2t2">t2t2</a> -
+				<i class="fa fa-heart-o"></i> <a href="https://github.com/t2t2/draft">opensource</a>
+			</footer>
+		</div>
+	</div>
 @stop

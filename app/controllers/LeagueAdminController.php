@@ -119,6 +119,7 @@ class LeagueAdminController extends PageController {
 		}
 
 		$league->updateLeagueDates();
+		$league->save();
 
 		Notification::success(count($movies) . ' movie(s) have been added!');
 
@@ -146,6 +147,7 @@ class LeagueAdminController extends PageController {
 
 		$movie->delete();
 		$league->updateLeagueDates();
+		$league->save();
 
 		Notification::success('Movie removed from the league');
 
@@ -257,7 +259,7 @@ class LeagueAdminController extends PageController {
 		/** @type LeagueTeam $team */
 		$team = $league->teams()->where('id', Input::get('team'))->first();
 
-		if(!$team) {
+		if (! $team) {
 			Notification::error('Team not found');
 
 			return Redirect::back();
@@ -266,6 +268,123 @@ class LeagueAdminController extends PageController {
 		$team->delete();
 
 		Notification::success('Team has been removed');
+
+		return Redirect::back();
+	}
+
+
+	/**
+	 * Get league drafting page
+	 *
+	 * @param League $league
+	 *
+	 * @return \Illuminate\Http\RedirectResponse|\Illuminate\View\View
+	 */
+	public function draft(League $league) {
+		$league->load('movies', 'movies.movie', 'movies.teams', 'teams');
+
+		if ($league->movies->count() == 0) {
+			Notification::error('You need to add more movies before being able to draft');
+
+			return Redirect::route('league.admin.movies', ['league' => $league->slug]);
+		}
+		if ($league->teams->count() == 0) {
+			Notification::error('You need to add more teams before being able to draft');
+
+			return Redirect::route('league.admin.teams', ['league' => $league->slug]);
+		}
+
+		// Prepend a no team element
+		$teams = [0 => '(No team)'] + ['Teams' => $league->teams->lists('name', 'id')];
+
+		// Create a movies array that has the team which owns it ID
+		$movies = $league->movies->reduce(function ($data, LeagueMovie $movie) {
+			$data[$movie->id] = [
+				'movie'   => $movie->movie,
+				'price'   => $movie->price,
+				'team_id' => $movie->teams->first() ? $movie->teams->first()->id : null
+			];
+
+			return $data;
+		}, []);
+
+		$this->layout->content = View::make('league.admin.draft', compact('league', 'movies', 'teams'));
+
+		return $this->layout;
+	}
+
+	/**
+	 * Save league drafting changes
+	 *
+	 * @param League $league
+	 *
+	 * @return \Illuminate\Http\RedirectResponse
+	 */
+	public function storeDraft(League $league) {
+		$league->load('movies', 'movies.movie', 'movies.teams', 'teams');
+
+		$movies = $league->movies;
+		$teams = $league->teams;
+
+		$input = Input::get('movie');
+		if(!is_array($input)) {
+			App::error(403);
+		}
+		$changes = 0;
+
+		foreach ($input as $movie_id => $post_data) {
+			/** @type LeagueMovie $movie */
+			$movie = $movies->find($movie_id);
+			if (! $movie) continue;
+
+			// Price
+			$movie->price = $post_data['price'];
+			if ($movie->isDirty()) {
+				$changes++;
+				$movie->save();
+			}
+
+			// Team
+			$current_team = (! $movie->teams->isEmpty()) ? $movie->teams->first()->id : 0;
+
+			// If there's a change detected and the new team is valid
+			if ($post_data['team_id'] != $current_team && (
+					$post_data['team_id'] == 0 || ($new_team = $teams->find($post_data['team_id']))
+				)
+			) {
+				/** @type LeagueTeam $new_team */
+				DB::beginTransaction();
+
+				// Remove old team
+				if(! $movie->teams->isEmpty()) {
+					$movie->teams()->detach($current_team);
+				}
+				// Add new team
+				if(isset($new_team)) {
+					$movie->teams()->attach($new_team);
+				}
+
+				$changes++;
+				DB::commit();
+			}
+
+		}
+
+		Notification::success("{$changes} have been saved!");
+
+		// Active league check
+		$active_check = DB::table('league_team_movies')->whereIn('league_team_id', $teams->modelKeys())->count();
+
+		$league->active = (bool) $active_check;
+		if($league->isDirty()) {
+			$league->save();
+
+			if($league->active) {
+				Notification::success('Your league is now considered active! Happy Drafting!');
+			} else {
+				Notification::warning('Your league is no longer considered active.');
+			}
+		}
 
 		return Redirect::back();
 	}
