@@ -117,6 +117,10 @@ class League extends Eloquent implements SluggableInterface {
 		return $query->whereBetween('start_date', [$search_start, $search_end]);
 	}
 
+	public function getEndedAttribute() {
+		return $this->end_date->isPast();
+	}
+
 	/**
 	 * Check if user is an admin of the league
 	 *

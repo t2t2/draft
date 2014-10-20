@@ -9,7 +9,7 @@
 		<div class="medium-6 column">
 			<h4>About</h4>
 			<p>
-				{{{ $league->description }}}
+				{{ nl2br(e($league->description)) }}
 			</p>
 			@if($league->url)
 				<p><a href="{{{ $league->url }}}">{{{ $league->url }}}</a></p>
@@ -30,6 +30,11 @@
 					<li><a href="{{ route('user.show', ['user' => $user->username]) }}">{{ $user->username }}</a></li>
 				@endforeach
 			</ul>
+			@if($league->ended)
+				<div data-alert class="alert-box secondary">
+					This league has been archived.
+				</div>
+			@endif
 		</div>
 	</div>
 @endif
@@ -57,7 +62,7 @@
 $navs = [
 	['text' => 'Home', 'url' => route('league.show', ['league' => $league->slug]), 'active' => 'league.show'],
 ];
-if(Auth::check() && $league->userIsAdmin(Auth::user())) {
+if(Auth::check() && $league->userIsAdmin(Auth::user()) && !$league->ended) {
 	$navs[] = 'divider';
 	$navs[] = ['text' => 'League Admin'];
 	$navs[] = [

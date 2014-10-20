@@ -41,6 +41,8 @@ class LeagueController extends PageController {
 		// Generate the query
 		$leagues_query = League::query();
 
+		$leagues_query->where('private', 0);
+
 		// Season
 		if ($search['season'] != 0) {
 			$leagues_query->season($search['year'], $search['season']);
