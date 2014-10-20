@@ -1,10 +1,12 @@
 <?php
 
 use Illuminate\Console\Command;
+use Indatus\Dispatcher\Drivers\Cron\Scheduler;
+use Indatus\Dispatcher\Scheduling\ScheduledCommandInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 
-class ScrapeUpcomingReleasesCommand extends Command {
+class ScrapeUpcomingReleasesCommand extends Command implements ScheduledCommandInterface {
 
 	/**
 	 * The console command name.
@@ -56,4 +58,31 @@ class ScrapeUpcomingReleasesCommand extends Command {
 		];
 	}
 
+	/**
+	 * User to run the command as
+	 * @return string Defaults to false to run as default user
+	 */
+	public function user() {
+		return false;
+	}
+
+	/**
+	 * When a command should run
+	 *
+	 * @param Scheduler|\Indatus\Dispatcher\Scheduling\Schedulable $scheduler
+	 *
+	 * @return \Indatus\Dispatcher\Scheduling\Schedulable|\Indatus\Dispatcher\Scheduling\Schedulable[]
+	 */
+	public function schedule(\Indatus\Dispatcher\Scheduling\Schedulable $scheduler) {
+		return $scheduler->weekly();
+	}
+
+	/**
+	 * Environment(s) under which the given command should run
+	 * Defaults to '*' for all environments
+	 * @return string|array
+	 */
+	public function environment() {
+		return '*';
+	}
 }

@@ -8,7 +8,8 @@
 		"cviebrock/eloquent-sluggable": "2.*",
 		"binarix/foundation-pagination": "1.0.0",
 		"fabpot/goutte": "~2.0",
-		"pda/pheanstalk": "~2.0"
+		"pda/pheanstalk": "~2.0",
+		"indatus/dispatcher": "v1.*"
 	},
 	"require-dev": {
 		"barryvdh/laravel-ide-helper": "1.*",

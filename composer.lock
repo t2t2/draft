@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "83a2c00d7fc557cdd143670f7eb0a9a7",
+    "hash": "8f5bc3b018332bd3fa6b5b46b6cfbf2f",
     "packages": [
         {
             "name": "anahkiasen/former",
@@ -545,6 +545,59 @@
             "time": "2014-08-17 21:15:53"
         },
         {
+            "name": "indatus/dispatcher",
+            "version": "v1.4.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Indatus/dispatcher.git",
+                "reference": "42c32027e947718873af2784af5f7567e2d246f9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Indatus/dispatcher/zipball/42c32027e947718873af2784af5f7567e2d246f9",
+                "reference": "42c32027e947718873af2784af5f7567e2d246f9",
+                "shasum": ""
+            },
+            "require": {
+                "mtdowling/cron-expression": "~1.0.3",
+                "php": ">=5.3.2",
+                "wp-cli/php-cli-tools": "v0.9.4-patch46"
+            },
+            "require-dev": {
+                "mockery/mockery": "~0.9",
+                "orchestra/testbench": "~2.1.1",
+                "phpunit/phpunit": "~4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "tests/TestCase.php"
+                ],
+                "psr-0": {
+                    "Indatus\\Dispatcher\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ben Kuhl",
+                    "email": "bkuhl@indatus.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Schedule your artisan commands within your application",
+            "keywords": [
+                "artisan",
+                "dispatcher",
+                "laravel",
+                "schedule"
+            ],
+            "time": "2014-09-22 17:06:36"
+        },
+        {
             "name": "ircmaxell/password-compat",
             "version": "1.0.3",
             "source": {
@@ -817,6 +870,47 @@
                 "psr-3"
             ],
             "time": "2014-09-30 13:30:58"
+        },
+        {
+            "name": "mtdowling/cron-expression",
+            "version": "v1.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mtdowling/cron-expression.git",
+                "reference": "a47ac8d5ec15049013792401af5a4d13e3dbe7f6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mtdowling/cron-expression/zipball/a47ac8d5ec15049013792401af5a4d13e3dbe7f6",
+                "reference": "a47ac8d5ec15049013792401af5a4d13e3dbe7f6",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Cron": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Dowling",
+                    "email": "mtdowling@gmail.com",
+                    "homepage": "https://github.com/mtdowling"
+                }
+            ],
+            "description": "CRON for PHP: Calculate the next or previous run date and determine if a CRON expression is due",
+            "keywords": [
+                "cron",
+                "schedule"
+            ],
+            "time": "2013-11-23 19:48:39"
         },
         {
             "name": "nesbot/carbon",
@@ -2071,6 +2165,51 @@
             "description": "Symfony Translation Component",
             "homepage": "http://symfony.com",
             "time": "2014-09-23 05:25:11"
+        },
+        {
+            "name": "wp-cli/php-cli-tools",
+            "version": "v0.9.4-patch46",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/wp-cli/php-cli-tools.git",
+                "reference": "02d5ed4cdbab911df91bf06062c8b2705fb0919a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wp-cli/php-cli-tools/zipball/02d5ed4cdbab911df91bf06062c8b2705fb0919a",
+                "reference": "02d5ed4cdbab911df91bf06062c8b2705fb0919a",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">= 5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "cli": "lib/"
+                },
+                "files": [
+                    "lib/cli/cli.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "James Logsdon",
+                    "email": "jlogsdon@php.net",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Console utilities for PHP",
+            "homepage": "http://github.com/jlogsdon/php-cli-tools",
+            "keywords": [
+                "cli",
+                "console"
+            ],
+            "time": "2014-02-01 23:11:00"
         }
     ],
     "packages-dev": [

@@ -126,7 +126,7 @@ return array(
 		'Binarix\FoundationPagination\FoundationPaginationServiceProvider',
 		'Krucas\Notification\NotificationServiceProvider',
 		'Cviebrock\EloquentSluggable\SluggableServiceProvider',
-
+		'Indatus\Dispatcher\ServiceProvider',
 	),
 
 	/*
