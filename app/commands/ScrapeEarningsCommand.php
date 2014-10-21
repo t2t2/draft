@@ -125,8 +125,8 @@ class ScrapeEarningsCommand extends Command implements ScheduledCommandInterface
 		 * Skip Saturday & Sunday (Weekend Estimates)
 		 */
 		return [
-			$scheduler->getNewSchedulerClass()->everyWeekday()->hours([18]),
-			$scheduler->getNewSchedulerClass()->daysOfTheWeek(Scheduler::TUESDAY .'-'. Scheduler::SATURDAY)->hours([0, 5]),
+			$scheduler->getNewSchedulerClass()->daily()->everyWeekday()->hours([18]),
+			$scheduler->getNewSchedulerClass()->daily()->daysOfTheWeek(Scheduler::TUESDAY .'-'. Scheduler::SATURDAY)->hours([0, 5]),
 		];
 	}
 
