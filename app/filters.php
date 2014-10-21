@@ -109,7 +109,7 @@ Route::filter('league.active', function (\Illuminate\Routing\Route $route) {
 	/** @var League $league */
 	$league = $route->getParameter('league');
 
-	if (! $league->active) {
+	if ($league->ended) {
 		App::abort(404);
 	}
 });
