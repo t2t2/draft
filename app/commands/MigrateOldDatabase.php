@@ -2,7 +2,6 @@
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 
 class MigrateOldDatabase extends Command {
@@ -19,12 +18,11 @@ class MigrateOldDatabase extends Command {
 	 *
 	 * @var string
 	 */
-	protected $description = 'Upgade database from alpha.';
+	protected $description = 'Upgrade database from alpha.';
 
 	/**
 	 * Create a new command instance.
 	 *
-	 * @return void
 	 */
 	public function __construct() {
 		parent::__construct();
@@ -53,6 +51,55 @@ class MigrateOldDatabase extends Command {
 		DB::beginTransaction();
 
 		// Users
+		$users = $this->migrateUsers();
+		$this->migrateMovies();
+		$this->migrateMovieEarnings();
+		$this->migrateLeagues();
+		$league_movie_by_league_and_movie_id = $this->migrateLeagueMovies();
+		$team_by_league_and_user_id = $this->migrateLeagueUsers($users);
+		$this->migrateLeagueMovieUsers($team_by_league_and_user_id, $league_movie_by_league_and_movie_id);
+
+
+		DB::commit();
+		if ($disableForeignKeyChecks) {
+			DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+		}
+	}
+
+	/**
+	 * Get stuff from old database
+	 *
+	 * @return \Illuminate\Database\Connection
+	 */
+	public function fromOldDB() {
+		return DB::connection($this->argument('old-connection'));
+	}
+
+	/**
+	 * Get the console command arguments.
+	 *
+	 * @return array
+	 */
+	protected function getArguments() {
+		return [
+			['old-connection', InputArgument::REQUIRED, 'The old connection to use'],
+		];
+	}
+
+	/**
+	 * Get the console command options.
+	 *
+	 * @return array
+	 */
+	protected function getOptions() {
+		return [
+		];
+	}
+
+	/**
+	 * @return Collection Users
+	 */
+	protected function migrateUsers() {
 		$this->info('Migrating users...');
 		$users = (new Collection($this->fromOldDB()->table('users')->get()))->keyBy('id');
 		$count = 0;
@@ -69,7 +116,12 @@ class MigrateOldDatabase extends Command {
 			]);
 		}
 
-		// Movies
+		return $users;
+	}
+
+	/**
+	 */
+	protected function migrateMovies() {
 		$this->info('Migrating movies...');
 		$movies = (new Collection($this->fromOldDB()->table('movies')->get()))->keyBy('id');
 		$count = 0;
@@ -85,7 +137,11 @@ class MigrateOldDatabase extends Command {
 			]);
 		}
 
-		// movie_earnings
+	}
+
+	/**
+	 */
+	protected function migrateMovieEarnings() {
 		$this->info('Migrating movie_earnings...');
 		$movie_earnings = (new Collection($this->fromOldDB()->table('movie_earnings')->get()))->keyBy('id');
 		$count = 0;
@@ -100,8 +156,11 @@ class MigrateOldDatabase extends Command {
 				'updated_at' => $movie_earning->updated_at,
 			]);
 		}
+	}
 
-		// leagues
+	/**
+	 */
+	protected function migrateLeagues() {
 		$this->info('Migrating leagues...');
 		$leagues = (new Collection($this->fromOldDB()->table('leagues')->get()))->keyBy('id');
 		$count = 0;
@@ -126,8 +185,12 @@ class MigrateOldDatabase extends Command {
 				'updated_at'  => $league->updated_at,
 			]);
 		}
+	}
 
-		// league_movies
+	/**
+	 * @return array
+	 */
+	protected function migrateLeagueMovies() {
 		$this->info('Migrating league_movies...');
 		$league_movies = (new Collection($this->fromOldDB()->table('league_movie')->get()))->keyBy('id');
 		$league_movie_by_league_and_movie_id = [];
@@ -148,7 +211,15 @@ class MigrateOldDatabase extends Command {
 			$league_movie_by_league_and_movie_id[$league_movie->league_id][$league_movie->movie_id] = $league_movie_id;
 		}
 
-		// league_users
+		return $league_movie_by_league_and_movie_id;
+	}
+
+	/**
+	 * @param $users
+	 *
+	 * @return array
+	 */
+	protected function migrateLeagueUsers(Collection $users) {
 		$this->info('Migrating league_users...');
 		$league_users = (new Collection($this->fromOldDB()->table('league_user')->get()))->keyBy('id');
 		$team_by_league_and_user_id = [];
@@ -187,7 +258,14 @@ class MigrateOldDatabase extends Command {
 			}
 		}
 
-		// league_movie_users
+		return $team_by_league_and_user_id;
+	}
+
+	/**
+	 * @param $team_by_league_and_user_id
+	 * @param $league_movie_by_league_and_movie_id
+	 */
+	protected function migrateLeagueMovieUsers($team_by_league_and_user_id, $league_movie_by_league_and_movie_id) {
 		$this->info('Migrating league_movie_users...');
 		$league_movie_users = (new Collection($this->fromOldDB()->table('league_movie_user')->get()))->keyBy('id');
 		$count = 0;
@@ -210,42 +288,6 @@ class MigrateOldDatabase extends Command {
 				'updated_at'      => $league_movie_user->updated_at,
 			]);
 		}
-
-
-		DB::commit();
-		if ($disableForeignKeyChecks) {
-			DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-		}
-	}
-
-	/**
-	 * Get stuff from old database
-	 *
-	 * @return \Illuminate\Database\Connection
-	 */
-	public function fromOldDB() {
-		return DB::connection($this->argument('old-connection'));
-	}
-
-	/**
-	 * Get the console command arguments.
-	 *
-	 * @return array
-	 */
-	protected function getArguments() {
-		return [
-			['old-connection', InputArgument::REQUIRED, 'The old connection to use'],
-		];
-	}
-
-	/**
-	 * Get the console command options.
-	 *
-	 * @return array
-	 */
-	protected function getOptions() {
-		return [
-		];
 	}
 
 }
