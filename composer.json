@@ -1,4 +1,7 @@
 {
+	"name": "t2t2/draft",
+	"description": "Fantasy Movie Draft site",
+	"type": "project",
 	"require": {
 		"nesbot/carbon": "1.*",
 		"anahkiasen/former": "3.*",
