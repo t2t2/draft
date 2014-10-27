@@ -37,6 +37,9 @@ class LeagueController extends PageController {
 		if (! isset($search['year']) || ! isset($years_list[$search['year']])) {
 			$search['year'] = $now->year;
 		}
+		if(! isset($search['inactive'])) {
+			$search['inactive'] = false;
+		}
 
 		// Generate the query
 		$leagues_query = League::query();
@@ -47,6 +50,9 @@ class LeagueController extends PageController {
 		if ($search['season'] != 0) {
 			$leagues_query->season($search['year'], $search['season']);
 		}
+		// Active
+		$leagues_query->where('active', !$search['inactive']);
+
 
 		$leagues = $leagues_query->paginate(10);
 

@@ -8,7 +8,8 @@
 		<div class="row">
 			{{ Former::select('year')->options($years)->addGroupClass('medium-2 column') }}
 			{{ Former::select('season')->options($seasons)->addGroupClass('medium-3 column') }}
-			<div class="medium-7 column"><!-- placeholder --></div>
+			{{ Former::checkbox('inactive')->value(1)->label('Show inactive leagues')->addGroupClass('medium-3 column') }}
+			<div class="medium-4 column"><!-- placeholder --></div>
 		</div>
 		{{ Former::actions()->primary_submit('Search')->class('pull-right') }}
 	{{ Former::close() }}
