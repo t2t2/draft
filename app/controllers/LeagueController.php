@@ -131,8 +131,9 @@ class LeagueController extends PageController {
 
 		// Create the league
 		$league = new League(Input::only([
-			'name', 'description', 'url', 'private', 'money', 'units'
+			'name', 'description', 'url', 'money', 'units'
 		]));
+		$league->private = Input::get('private') ? true : false;
 		$league->mode = 'bid';
 		$league->extra_weeks = Input::get('extra_weeks');
 		$league->start_date = $league->end_date = Carbon::now()->addWeeks(Config::get('draft.maximum_weeks'));

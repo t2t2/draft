@@ -53,8 +53,9 @@ class LeagueAdminController extends PageController {
 
 		// Overwrites
 		$league->fill(Input::only([
-			'name', 'description', 'url', 'private', 'money', 'units', 'extra_weeks'
+			'name', 'description', 'url', 'money', 'units', 'extra_weeks'
 		]));
+		$league->private = Input::get('private') ? true : false;
 
 		if ($league->save()) {
 			// TODO: End date checking
