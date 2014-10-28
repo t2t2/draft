@@ -166,7 +166,7 @@ class LeagueController extends PageController {
 	public function show(League $league) {
 		$league->load(['teams', 'teams.users', 'teams.movies' => function($query) {
 			$query->ordered();
-		}, 'teams.movies.movie']);
+		}, 'teams.movies.movie', 'teams.movies.latestEarnings']);
 
 		// Pre-do some work for teams and sort them by earnings
 		$teams = new Collection();
