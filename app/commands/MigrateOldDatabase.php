@@ -21,14 +21,6 @@ class MigrateOldDatabase extends Command {
 	protected $description = 'Upgrade database from alpha.';
 
 	/**
-	 * Create a new command instance.
-	 *
-	 */
-	public function __construct() {
-		parent::__construct();
-	}
-
-	/**
 	 * Execute the console command.
 	 *
 	 * @return mixed

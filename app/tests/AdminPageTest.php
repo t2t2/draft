@@ -21,7 +21,7 @@ class AdminPageTest extends TestCase {
 		}
 
 		// get admin homepage
-		$crawler = $this->client->request('GET', '/admin');
+		$this->client->request('GET', '/admin');
 
 		$this->assertTrue($this->client->getResponse()->isRedirection());
 
@@ -46,10 +46,11 @@ class AdminPageTest extends TestCase {
 	}
 
 	public function testAdminHomepage() {
+		/** @type User $user */
 		$user = User::find(1);
 		$this->be($user);
 
-		$crawler = $this->client->request('GET', '/admin');
+		$this->client->request('GET', '/admin');
 
 		$this->assertTrue($this->client->getResponse()->isOk());
 	}

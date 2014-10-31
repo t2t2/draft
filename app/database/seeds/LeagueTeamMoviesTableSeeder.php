@@ -23,6 +23,11 @@ class LeagueTeamMoviesTableSeeder extends Seeder {
 			}
 		}
 
+		// Mark as active
+		$league = League::first();
+		$league->active = 1;
+		$league->save();
+
 	}
 
 }

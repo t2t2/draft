@@ -42,6 +42,7 @@ class LeagueController extends PageController {
 		}
 
 		// Generate the query
+		/** @type League|\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder $leagues_query */
 		$leagues_query = League::query();
 
 		$leagues_query->where('private', 0);
@@ -70,11 +71,12 @@ class LeagueController extends PageController {
 	 * Show leagues related to the current user
 	 */
 	public function mine() {
+		/** @type League|\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder $leagues_query */
 		$leagues_query = League::query();
 
 		// Where the user is a player
 		$leagues_query->whereExists(function (\Illuminate\Database\Query\Builder $query) {
-			$query->select(DB::raw(1))
+			$query->select([DB::raw(1)])
 			      ->from('league_teams')
 			      ->join('league_team_user', 'league_teams.id', '=', 'league_team_user.league_team_id')
 			      ->where('league_team_user.user_id', Auth::user()->id)
@@ -83,7 +85,7 @@ class LeagueController extends PageController {
 
 		// Where the user is an admin
 		$leagues_query->orWhereExists(function (\Illuminate\Database\Query\Builder $query) {
-			$query->select(DB::raw(1))
+			$query->select([DB::raw(1)])
 			      ->from('league_admins')
 			      ->where('league_admins.user_id', Auth::user()->id)
 			      ->whereRaw('league_admins.league_id = leagues.id');
@@ -165,6 +167,7 @@ class LeagueController extends PageController {
 	 */
 	public function show(League $league) {
 		$league->load(['teams', 'teams.users', 'teams.movies' => function($query) {
+			/** @type LeagueMovie|\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder $query */
 			$query->ordered();
 		}, 'teams.movies.movie', 'teams.movies.latestEarnings']);
 

@@ -3,8 +3,7 @@
 use Illuminate\Console\Command;
 use Indatus\Dispatcher\Drivers\Cron\Scheduler;
 use Indatus\Dispatcher\Scheduling\ScheduledCommandInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputArgument;
+
 
 class ScrapeUpcomingReleasesCommand extends Command implements ScheduledCommandInterface {
 
@@ -21,13 +20,6 @@ class ScrapeUpcomingReleasesCommand extends Command implements ScheduledCommandI
 	 * @var string
 	 */
 	protected $description = 'Scrape upcoming relases.';
-
-	/**
-	 * Create a new command instance.
-	 */
-	public function __construct(\GuzzleHttp\Client $client) {
-		parent::__construct();
-	}
 
 	/**
 	 * Execute the console command.

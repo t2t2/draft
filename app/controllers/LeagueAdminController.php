@@ -379,7 +379,7 @@ class LeagueAdminController extends PageController {
 		$active_check = DB::table('league_team_movies')->whereIn('league_team_id', $teams->modelKeys())->count();
 
 		$league->active = $active_check ? 1 : 0;
-		if($league->isDirty()) {
+		if($league->isDirty('active')) {
 			$league->save();
 
 			if($league->active) {

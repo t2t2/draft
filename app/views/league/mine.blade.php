@@ -4,9 +4,11 @@
 	<h2>My Leagues</h2>
 
 	@if($leagues->count())
-		@foreach($leagues as $league)
-			@include('partials.league', compact('league'))
-		@endforeach
+		<ul class="no-bullet">
+			@foreach($leagues as $league)
+				@include('partials.league', compact('league'))
+			@endforeach
+		</ul>
 
 		{{ $leagues->links() }}
 	@else

@@ -15,9 +15,11 @@
 	{{ Former::close() }}
 
 	@if($leagues->count())
-		@foreach($leagues as $league)
-			@include('partials.league', compact('league'))
-		@endforeach
+		<ul class="no-bullet">
+			@foreach($leagues as $league)
+				@include('partials.league', compact('league'))
+			@endforeach
+		</ul>
 
 		{{ $leagues->appends($search)->links() }}
 	@else

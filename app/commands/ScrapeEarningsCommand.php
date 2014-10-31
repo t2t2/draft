@@ -23,15 +23,6 @@ class ScrapeEarningsCommand extends Command implements ScheduledCommandInterface
 	protected $description = 'Scrape earnings data';
 
 	/**
-	 * Create a new command instance.
-	 *
-	 * @return void
-	 */
-	public function __construct() {
-		parent::__construct();
-	}
-
-	/**
 	 * Execute the console command.
 	 *
 	 * @return mixed
@@ -40,6 +31,7 @@ class ScrapeEarningsCommand extends Command implements ScheduledCommandInterface
 		$days = $this->getDatesToScrape();
 		$delay = 2;
 
+		/** @type Carbon $day */
 		foreach($days as $day) {
 			$delay += rand(1, 5);
 			Queue::later($delay, 'EarningsScraperWorker', ['day' => $day->toDateTimeString()]);
