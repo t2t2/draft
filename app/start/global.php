@@ -106,10 +106,18 @@ use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 App::error(function (MethodNotAllowedHttpException $e) {
 	$layout = View::make("layout.main");
 	$layout->content = View::make("errors.shenanigans");
+	$layout->content->message = 'Invalid method';
 
 	return Response::make($layout, 404);
 });
 
+App::error(function (\Illuminate\Session\TokenMismatchException $exception) {
+	$layout = View::make("layout.main");
+	$layout->content = View::make("errors.shenanigans");
+	$layout->content->message = 'Failed security check';
+
+	return Response::make($layout, 404);
+});
 
 /*
  * Layout Defaults
