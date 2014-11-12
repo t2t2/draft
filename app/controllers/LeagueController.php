@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
 class LeagueController extends PageController {
@@ -190,6 +189,22 @@ class LeagueController extends PageController {
 		$teams->sortByDesc('earnings');
 
 		$this->layout->content = View::make('league.show', compact('league', 'teams'));
+		$this->layout->content->show_league_info = true;
+	}
+
+	/**
+	 * League display based by movies
+	 *
+	 * @param League $league
+	 */
+	public function showMovies(League $league) {
+		// Preload data
+		$league->load(['movies' => function($query) {
+			/** @type LeagueMovie|\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder $query */
+			$query->ordered();
+		}, 'movies.movie', 'movies.latestEarnings', 'movies.teams']);
+
+		$this->layout->content = View::make('league.show.movies', compact('league'));
 		$this->layout->content->show_league_info = true;
 	}
 } 

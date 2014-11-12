@@ -60,7 +60,14 @@
 	<div class="medium-3 column">
 <?php
 $navs = [
-	['text' => 'Home', 'url' => route('league.show', ['league' => $league->slug]), 'active' => 'league.show'],
+	[
+		'text' => 'Home', 'url' => route('league.show', ['league' => $league->slug]),
+		'active' => 'league.show'
+	],
+	[
+		'text' => 'Movies', 'url' => route('league.show.movies', ['league' => $league->slug]),
+		'active' => 'league.show.movies'
+	],
 ];
 if(Auth::check() && $league->userIsAdmin(Auth::user()) && !$league->ended) {
 	$navs[] = 'divider';
