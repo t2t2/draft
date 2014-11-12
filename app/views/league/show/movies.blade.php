@@ -27,7 +27,11 @@
 					@if($movie->teams->count())
 						<td>{{{ $movie->teams->implode('name', ', ') }}}</td>
 						<td>{{{ $movie->price.$league->units }}}</td>
-						<td>{{{ '$'.number_format(round($movie->latestEarnings->domestic / ($movie->price ?: 1), 2)) }}} / {{{ $league->units }}}</td>
+						@if($movie->latestEarnings)
+							<td>{{{ '$'.number_format(round($movie->latestEarnings->domestic / ($movie->price ?: 1), 2)) }}} / {{{ $league->units }}}</td>
+						@else
+							<td>Not data yet</td>
+						@endif
 					@else
 						<td colspan="3" class="text-center">Not yet sold</td>
 					@endif
