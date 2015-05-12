@@ -40,5 +40,9 @@
         <noscript><p><img src="//stats.t2t2.eu/piwik.php?idsite=1" style="border:0;" alt="" /></p></noscript>
         <!-- End Piwik Code -->
 	@endif
+	
+	@section('extrajs')
+		
+	@show
 </body>
 </html>

@@ -68,6 +68,15 @@ class LeagueMovie extends Eloquent {
 		return $this->belongsTo('MovieEarning');
 	}
 
+	/**
+	 * All movie's earnings
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+	 */
+	public function earnings() {
+		return $this->hasMany('MovieEarning','movie_id','league_movie_id');
+	}
+
 
 	/**
 	 * Order movies by the release date

@@ -1,6 +1,9 @@
 @extends('layout.league')
 
 @section('layout.content')
+	<h4>Chart</h4>
+	<div id="earnings-chart" data-source="{{{ action("LeagueController@getChartData", array("league" => $league->slug)) }}}"> </div>
+	<div id="earnings-legend"></div>
 	<h4>Teams</h4>
 
 	<ol>
@@ -39,3 +42,10 @@
 	</ol>
 
 @endsection
+
+@section('extrajs')
+<script src="{{ asset('js/vendor/jquery.flot.min.js') }}"></script>
+<script src="{{ asset('js/vendor/jquery.flot.resize.min.js') }}"></script>
+<script src="{{ asset('js/vendor/jquery.flot.time.min.js') }}"></script>
+<script src="{{ asset('js/chart.js') }}"></script>
+@overwrite

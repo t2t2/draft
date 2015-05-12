@@ -191,6 +191,41 @@ class LeagueController extends PageController {
 		$this->layout->content = View::make('league.show', compact('league', 'teams'));
 		$this->layout->content->show_league_info = true;
 	}
+	
+	public function getChartData(League $league) {
+		$complete = new Collection();
+		$startdate = $league->start_date;
+		$enddate = $league->end_date;
+		$league->load(['teams.movies.movie.earnings' => function($query) {
+		}])->where('movie_earnings.date','<=',$enddate);
+		
+		foreach ($league->teams as $team) {
+			$team_info = new Collection();
+			$team_earnings = new Collection();
+			$complete->push($team_info);
+			$team_info->put("data",$team_earnings);
+			$team_info->put("label",$team->name);
+			
+			$earnings_per_date = new Collection();
+			foreach ($team->movies as $movie) {
+				foreach ($movie->movie->earnings as $earning){
+					if($earning->date >= $league->start_date && $earning->date <= $league->end_date) {
+						$mydate = $earning->date->format("U");
+						$old = $earnings_per_date->get($mydate,0);
+						$earnings_per_date->put($mydate,$old+$earning->domestic);
+					}
+				}
+			}
+			foreach ($earnings_per_date->keys() as $key) {
+				$item = new Collection();
+				$item->push($key * 1000); 
+				$item->push($earnings_per_date->get($key));
+				$team_earnings->push($item);
+			}
+		}
+		
+		return Response::json($complete);
+	}
 
 	/**
 	 * League display based by movies

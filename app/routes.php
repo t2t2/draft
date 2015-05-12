@@ -48,6 +48,7 @@ Route::group(['prefix' => 'leagues'], function () {
 Route::group(['prefix' => 'league/{league}'], function () {
 	Route::get('/', ['uses' => 'LeagueController@show', 'as' => 'league.show']);
 	Route::get('movies', ['uses' => 'LeagueController@showMovies', 'as' => 'league.show.movies']);
+	Route::get('/chartdata', ['uses' => 'LeagueController@getChartData']);
 
 	Route::group(['prefix' => 'admin', 'before' => ['auth', 'league.admin', 'league.active']], function () {
 
