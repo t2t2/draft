@@ -194,32 +194,69 @@ class LeagueController extends PageController {
 	
 	public function getChartData(League $league) {
 		$complete = new Collection();
+		$possible_dates = new Collection();
 		$startdate = $league->start_date;
 		$enddate = $league->end_date;
 		$league->load(['teams.movies.movie.earnings' => function($query) {
 		}])->where('movie_earnings.date','<=',$enddate);
 		
+		$info = new Collection();
+		
+		//Find all possible dates first
+		foreach ($league->teams as $team) {
+			foreach ($team->movies as $movie) {
+				foreach ($movie->movie->earnings as $earning){
+					if($earning->date >= $league->start_date && $earning->date <= $league->end_date) {
+						$possible_dates->push($earning->date->format("U"));
+					}
+				}
+			}
+		}
+		$possible_dates = $possible_dates->unique();
+		$possible_dates->sortBy(function($role){return $role;});
+		
+		//Go through the teams and populate the data
 		foreach ($league->teams as $team) {
 			$team_info = new Collection();
 			$team_earnings = new Collection();
 			$complete->push($team_info);
 			$team_info->put("data",$team_earnings);
 			$team_info->put("label",$team->name);
-			
+			$team_info->put("id",$team->id);
+
+			//fill the default for the date for 0.
+			//This allows for showing dots before any gross has started
 			$earnings_per_date = new Collection();
+			foreach ($possible_dates->values() as $mydate) {
+				$earnings_per_date->put($mydate,0);
+			}
+			//Fill actual data for movies now
 			foreach ($team->movies as $movie) {
 				foreach ($movie->movie->earnings as $earning){
-					if($earning->date >= $league->start_date && $earning->date <= $league->end_date) {
-						$mydate = $earning->date->format("U");
+					$mydate = $earning->date->format("U");
+					if($possible_dates->contains($mydate)) {
+						$myCollection = $info->get($mydate,new Collection());
+						$myCollection->put($movie->movie->id,$movie->movie);
+						$info->put($mydate,$myCollection);
 						$old = $earnings_per_date->get($mydate,0);
 						$earnings_per_date->put($mydate,$old+$earning->domestic);
 					}
 				}
 			}
+			//Format data for graph
+			$previousEarning = 0;
 			foreach ($earnings_per_date->keys() as $key) {
 				$item = new Collection();
 				$item->push($key * 1000); 
-				$item->push($earnings_per_date->get($key));
+				$newEarning = $earnings_per_date->get($key);
+				if ($newEarning < $previousEarning) {
+					//Gross should never go down, there's probably a hiccup in the graph
+					//Use the previous days earning
+					$item->push($previousEarning);
+				} else {
+					$item->push($newEarning);
+					$previousEarning = $newEarning;
+				}
 				$team_earnings->push($item);
 			}
 		}
