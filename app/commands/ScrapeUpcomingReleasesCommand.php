@@ -2,10 +2,8 @@
 
 use Illuminate\Console\Command;
 use Indatus\Dispatcher\Drivers\Cron\Scheduler;
-use Indatus\Dispatcher\Scheduling\ScheduledCommandInterface;
 
-
-class ScrapeUpcomingReleasesCommand extends Command implements ScheduledCommandInterface {
+class ScrapeUpcomingReleasesCommand extends Command {
 
 	/**
 	 * The console command name.
@@ -56,17 +54,6 @@ class ScrapeUpcomingReleasesCommand extends Command implements ScheduledCommandI
 	 */
 	public function user() {
 		return false;
-	}
-
-	/**
-	 * When a command should run
-	 *
-	 * @param Scheduler|\Indatus\Dispatcher\Scheduling\Schedulable $scheduler
-	 *
-	 * @return \Indatus\Dispatcher\Scheduling\Schedulable|\Indatus\Dispatcher\Scheduling\Schedulable[]
-	 */
-	public function schedule(\Indatus\Dispatcher\Scheduling\Schedulable $scheduler) {
-		return $scheduler->weekly();
 	}
 
 	/**
