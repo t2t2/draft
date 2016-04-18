@@ -51,23 +51,24 @@ class EarningsScraperWorker {
 	 */
 	private function getEarnings(Carbon $date) {
 		$crawler = $this->client->request('GET', $this->getUrl($date), [], [], [
-			'HTTP_USER_AGENT' => "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:33.0) Gecko/20100101 Firefox/33.0"
+			'HTTP_USER_AGENT' => "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101 Firefox/45.0"
 		]);
 
-		$date = new Carbon($crawler->filter('.data_table>h1 span')->text());
-		$movies = $crawler->filter('.data_table tbody tr')->each(function (Crawler $node) {
+		$result_date = new Carbon($crawler->filter('font[face="Verdana"][size="4"] > b')->text());
+		$movies = $crawler->filter('#body table[border="0"][cellpadding="5"] tr:not([bgcolor="#dcdcdc"])')->each(function (Crawler $node) {
 			$cols = $node->children();
 
+			$url = $cols->eq(2)->children()->eq(0)->children()->eq(0)->attr('href');
+
 			$info = [
-				'boxoffice_id'   => str_replace('/statistics/movies/', '', $cols->eq(1)->children()->eq(0)
-				                                                                ->attr('href')),
-				'domestic_total' => intval(str_replace(['$', ','], '', $cols->eq(7)->text())),
+				'boxmojo_id'   => str_replace('/movies/?page=daily&id=', '', str_replace('.htm', '', $url)),
+				'domestic_total' => intval(str_replace(['$', ','], '', $cols->eq(9)->text())),
 			];
 
 			return $info;
 		});
 
-		return [$date, $movies];
+		return [$result_date, $movies];
 	}
 
 	/**
@@ -78,8 +79,7 @@ class EarningsScraperWorker {
 	 * @return string
 	 */
 	private function getUrl(Carbon $date) {
-		return 'http://pro.boxoffice.com/statistics/bo_numbers/daily/' . $date->copy()->addDay()
-		                                                                      ->toDateString() . '?force_kind=true';
+		return 'http://www.boxofficemojo.com/daily/chart/?view=1day&sortdate=' . $date->toDateString();
 	}
 
 	/**
@@ -89,15 +89,15 @@ class EarningsScraperWorker {
 	 * @param        $earnings
 	 */
 	private function storeInteresting(Carbon $dateFor, $earnings) {
-		$movies = $this->getActiveMovies($dateFor)->keyBy('boxoffice_id');
+		$movies = $this->getActiveMovies($dateFor)->keyBy('boxmojo_id');
 
 		foreach ($earnings as $info) {
-			if (! $movies->has($info['boxoffice_id'])) {
+			if (! $movies->has($info['boxmojo_id'])) {
 				continue;
 			}
 
 			/** @type Movie $movie */
-			$movie = $movies->get($info['boxoffice_id']);
+			$movie = $movies->get($info['boxmojo_id']);
 			$earnings = $movie->earnings()->where('date', $dateFor)->first();
 			if (! $earnings) {
 				$earnings = new MovieEarning([

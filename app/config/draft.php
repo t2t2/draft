@@ -28,6 +28,11 @@ return [
 	'maximum_weeks'   => 36,
 
 	/**
+	 * Source Mode
+	 */
+	'source' => 'boxmojo',
+
+	/**
 	 * Rules on how the season for the league is decided (based on $league->start_date).
 	 * Values is used for Carbon::create so follow it's order. (Make sure year is null to keep it current year.
 	 */
@@ -36,12 +41,12 @@ return [
 		1 => [
 			'name' => 'Spring',
 			'start' => [null, 1, 1, 0, 0],
-			'end' => [null, 4, 1, 0, 0],
+			'end' => [null, 3, 20, 0, 0],
 		],
 		// Summer Season
 		2 => [
 			'name' => 'Summer',
-			'start' => [null, 4, 1, 0, 0],
+			'start' => [null, 3, 20, 0, 0],
 			'end' => [null, 9, 1, 0, 0],
 		],
 		// Summer Season

@@ -2,10 +2,11 @@
 
 use Illuminate\Console\Command;
 use Indatus\Dispatcher\Drivers\Cron\Scheduler;
+use Indatus\Dispatcher\Scheduling\ScheduledCommandInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 
-class ScrapeEarningsCommand extends Command {
+class ScrapeEarningsCommand extends Command implements ScheduledCommandInterface {
 
 	/**
 	 * The console command name.
@@ -100,6 +101,25 @@ class ScrapeEarningsCommand extends Command {
 	 */
 	public function user() {
 		return false;
+	}
+
+	/**
+	 * When a command should run
+	 *
+	 * @param Scheduler|\Indatus\Dispatcher\Scheduling\Schedulable $scheduler
+	 *
+	 * @return \Indatus\Dispatcher\Scheduling\Schedulable|\Indatus\Dispatcher\Scheduling\Schedulable[]
+	 */
+	public function schedule(\Indatus\Dispatcher\Scheduling\Schedulable $scheduler) {
+		/*
+		 * Scheduler based on GMT while earnings scraper is based on Los Angeles
+		 *
+		 * Skip Saturday & Sunday (Weekend Estimates)
+		 */
+		return [
+			$scheduler->getNewSchedulerClass()->daily()->everyWeekday()->hours([18]),
+			$scheduler->getNewSchedulerClass()->daily()->daysOfTheWeek(Scheduler::TUESDAY .'-'. Scheduler::SATURDAY)->hours([0, 5]),
+		];
 	}
 
 	/**

@@ -179,6 +179,7 @@ class LeagueAdminController extends PageController {
 			$date_range[1] = Carbon::now()->addWeeks(Config::get('draft.maximum_weeks'));
 		}
 		$query->whereBetween('release', $date_range);
+		$query->whereNotNull(Config::get('draft.source') . '_id');
 		$query->orderBy('release', 'asc');
 
 		$movies = $query->get();
