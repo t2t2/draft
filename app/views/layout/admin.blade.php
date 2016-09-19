@@ -11,6 +11,9 @@
 // Navigation
 $items = [
 	['text' => 'Home', 'url' => route('admin.index'), 'active' => 'admin.index'],
+	['text' => 'Movies', 'url' => route('admin.movies'), 'active'=>'admin.movies'],
+	['text' => 'Add Movie', 'url' => route('admin.addMovie'), 'active'=>'admin.addMovie'],
+	
 ];
 ?>
 		<nav>

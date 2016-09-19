@@ -90,10 +90,10 @@ class LeagueAdminController extends PageController {
 	 * @param League $league
 	 */
 	public function addableMovies(League $league) {
+		$show_past = (bool)Input::get('show_past',false);
+		list($date_range, $movies) = $this->getAddableMovies($league,array(),$show_past);
 
-		list($date_range, $movies) = $this->getAddableMovies($league);
-
-		$this->layout->content = View::make('league.admin.addmovies', compact('league', 'movies', 'date_range'));
+		$this->layout->content = View::make('league.admin.addmovies', compact('league', 'movies', 'date_range','show_past'));
 	}
 
 
@@ -106,13 +106,14 @@ class LeagueAdminController extends PageController {
 	 */
 	public function addMovies(League $league) {
 		$movie_ids = Input::get('movie');
+		$show_past = Input::get('show_past',false);
 		if (count($movie_ids) == 0) {
 			Notification::error('Please choose movies to add');
 
 			return Redirect::back();
 		}
 
-		list($date_range, $movies) = $this->getAddableMovies($league, $movie_ids);
+		list($date_range, $movies) = $this->getAddableMovies($league, $movie_ids,$show_past);
 
 		/** @type Movie $movie */
 		foreach ($movies as $movie) {
@@ -163,10 +164,18 @@ class LeagueAdminController extends PageController {
 	 *
 	 * @return array
 	 */
-	protected function getAddableMovies(League $league, $movie_ids = []) {
-		$date_range = [Carbon::now(), $league->maxLastMovieDate()];
+	protected function getAddableMovies(League $league, $movie_ids = [],$show_past = false) {
 
 		$query = Movie::query();
+		if ($show_past)
+		{
+			$date_range = [Carbon::now()->subYear(),Carbon::now()];
+			$query->orderBy('release', 'desc');		
+		}
+		else
+		{
+			$date_range = [Carbon::now(), $league->maxLastMovieDate()];
+		}
 
 		if (count($movie_ids)) {
 			$query->whereIn('id', $movie_ids);

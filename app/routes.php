@@ -79,8 +79,13 @@ Route::group(['prefix' => 'league/{league}'], function () {
 
 
 // Admin
-Route::group(['prefix' => 'admin', 'before' => ['auth', 'admin'], 'namespace' => 'Admin'], function () {
-	Route::get('/', ['uses' => 'HomeController@index', 'as' => 'admin.index']);
+Route::group(['prefix' => 'admin', 'before' => ['auth', 'admin']], function () {
+	Route::get('/', ['uses' => 'AdminController@index', 'as' => 'admin.index']);
+	Route::get('movies', ['uses' => 'AdminController@movies', 'as' => 'admin.movies']);
+	Route::get('addMovie', ['uses' => 'AdminController@addMovie', 'as' => 'admin.addMovie']);
+	Route::post('addMovie', ['uses' => 'AdminController@addMovie', 'as' => 'admin.addMovie']);
+	Route::post('confirmMovie', ['uses' => 'AdminController@confirmMovie', 'as' => 'admin.confirmMovie']);
+
 });
 
 /**

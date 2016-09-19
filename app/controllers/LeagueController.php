@@ -1,7 +1,50 @@
 <?php
 
 use Illuminate\Support\Collection;
-
+class GraphMovie {
+	public $earnings;
+	private $earliest = NULL;
+	public function __construct() {
+		$this->earnings = new Collection();
+	}
+	public function addEarning($date,$earning) {
+		$this->earnings->put($date,$earning);
+		if (($this->earliest != NULL && $date < $this->earliest) || $this->earliest == NULL) {
+			$this->earliest = $date;
+		}
+	}
+	public function sort() {
+		$this->earnings->sortBy(function($role){return $role;});
+	}
+	public function getEarningForDate($date) {
+		//No data yet
+		if(count($this->earnings)==0) {
+			return 0;
+		}
+		//Data exists
+		if($this->earnings->contains($date)) {
+			return $this->earnings->get($date);
+		}
+		
+		//Before earliest data
+		//if ($this->earliest != NULL && $date < $this->earliest) {
+		//	return 0;
+		//}
+		
+		//Gap somewhere. Iterate through earnings and find the 
+		//Assume sorted
+		$retval = 0;
+		foreach ($this->earnings->keys() as $checkdate) {
+			if ($checkdate > $date) {
+				return $retval; //Return the entry before this 
+			}
+			$retval = $this->earnings->get($checkdate);
+		}
+		
+		//?
+		return $retval;
+	}
+}
 class LeagueController extends PageController {
 
 
@@ -200,8 +243,6 @@ class LeagueController extends PageController {
 		$league->load(['teams.movies.movie.earnings' => function($query) {
 		}])->where('movie_earnings.date','<=',$enddate);
 		
-		$info = new Collection();
-		
 		//Find all possible dates first
 		foreach ($league->teams as $team) {
 			foreach ($team->movies as $movie) {
@@ -219,44 +260,35 @@ class LeagueController extends PageController {
 		foreach ($league->teams as $team) {
 			$team_info = new Collection();
 			$team_earnings = new Collection();
+			$movies = new Collection();
 			$complete->push($team_info);
 			$team_info->put("data",$team_earnings);
 			$team_info->put("label",$team->name);
 			$team_info->put("id",$team->id);
 
-			//fill the default for the date for 0.
-			//This allows for showing dots before any gross has started
-			$earnings_per_date = new Collection();
-			foreach ($possible_dates->values() as $mydate) {
-				$earnings_per_date->put($mydate,0);
-			}
 			//Fill actual data for movies now
 			foreach ($team->movies as $movie) {
 				foreach ($movie->movie->earnings as $earning){
 					$mydate = $earning->date->format("U");
 					if($possible_dates->contains($mydate)) {
-						$myCollection = $info->get($mydate,new Collection());
-						$myCollection->put($movie->movie->id,$movie->movie);
-						$info->put($mydate,$myCollection);
-						$old = $earnings_per_date->get($mydate,0);
-						$earnings_per_date->put($mydate,$old+$earning->domestic);
+						$movieinfo = $movies->get($movie->movie->id,new GraphMovie());
+						$movieinfo->addEarning($mydate,$earning->domestic);
+						$movies->put($movie->movie->id,$movieinfo);
 					}
 				}
 			}
-			//Format data for graph
-			$previousEarning = 0;
-			foreach ($earnings_per_date->keys() as $key) {
+			//Sort movies so we can evaluate gaps
+			foreach ($movies->values() as $movie) {
+				$movie->sort();
+			}
+			foreach ($possible_dates->values() as $date) {
 				$item = new Collection();
-				$item->push($key * 1000); 
-				$newEarning = $earnings_per_date->get($key);
-				if ($newEarning < $previousEarning) {
-					//Gross should never go down, there's probably a hiccup in the graph
-					//Use the previous days earning
-					$item->push($previousEarning);
-				} else {
-					$item->push($newEarning);
-					$previousEarning = $newEarning;
+				$item->push($date * 1000); 
+				$movietotal = 0;
+				foreach ($movies->values() as $movie) {
+					$movietotal += $movie->getEarningForDate($date);
 				}
+				$item->push($movietotal);
 				$team_earnings->push($item);
 			}
 		}
